@@ -1,8 +1,12 @@
 class TreeNode {
 
+  // option is the attribute which store the "parent option"
   option = null;
+
   options = {};
   caption = '';
+  data = {};
+
   renderer = null;
   changeCallback = null;
 
@@ -12,13 +16,25 @@ class TreeNode {
     this.changeCallback = changeCallback;
   }
 
+  getData() {
+    return this.data;
+  }
+
+  setData(data) {
+    this.data = data;
+    return this;
+  }
+
+  setChangeCallback(changeCallback) {
+    this.changeCallback = changeCallback;
+  }
+
   update() {
     if (this.changeCallback) {
       this.changeCallback(this);
     }
 
     if (this.option) {
-
       this.option.node.update();
     }
   }
@@ -55,7 +71,8 @@ class TreeNode {
 
   createOption(value, caption) {
     const treeValue = new TreeOption(this, value, caption);
-    this.options[value] = treeValue;
+    const key = Object.values(this.options).length + 1 ;
+    this.options[key] = treeValue;
 
     this.update();
 
@@ -77,6 +94,12 @@ class TreeNode {
     }
   }
 
+  refresh() {
+    if(this.getRenderer() !== null) {
+      this.getRenderer().refresh();
+    }
+  }
+
   toJSON() {
     const options = {};
     for (const key in this.options) {
@@ -87,19 +110,41 @@ class TreeNode {
     return {
       caption: this.caption,
       options: options,
+      type: 'node',
+      data: this.getData(),
     };
+  }
+
+  loadData(data) {
+    this.caption = data.caption;
+    this.options = [];
+    this.data = data ? data : {};
+
+    for (const key in data.options) {
+      const options = data.options;
+      const treeValue = TreeOption.fromJSON(this, options[key]);
+      this.createOption(treeValue.value, treeValue.caption).setChild(treeValue.child);
+    }
+
+    this.refresh();
   }
 
   static fromJSON(json) {
     const {
       caption,
-      options
+      options,
+      data,
     } = json;
+
     const treeNode = new TreeNode(caption);
+    treeNode.setData(data ? data : {});
+
     for (const key in options) {
       const treeValue = TreeOption.fromJSON(treeNode, options[key]);
       treeNode.createOption(treeValue.value, treeValue.caption).setChild(treeValue.child);
     }
+
     return treeNode;
   }
 }
+

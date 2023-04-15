@@ -1,7 +1,35 @@
 body {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-size: 11px;
+  margin: 0;
+  padding: 0;
 }
+
+
+/* barre de défilement verticale */
+::-webkit-scrollbar {
+  width: 20px;
+  background-color: #E5E5E5;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #9AA8E8;
+  border: solid 1px #000;
+  border-radius: 10px;
+}
+
+/* barre de défilement horizontale */
+::-webkit-scrollbar-horizontal {
+  height: 10px;
+  background-color: #E5E5E5;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #9AA8E8;
+}
+
+
+/* ======================================= */
 
 .node {
   border: solid 1px #aaa;
@@ -51,13 +79,120 @@ body {
 #workspace {
   display: flex;
   flex-direction: row;
+  width: 100vw;
+  height: 100vh;
 }
+
 
 #tree-container {
   width: 600px;
 }
 
-#graph {
+
+#data-container {
+  width: 500px;
+  outline: solid 1px #aaa;
+  display: flex;
+  flex-direction: column;
+}
+
+#jstree-container {
+  flex-grow: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#node-data {
+  outline: solid 1px #aaa;
+  height: 400px;
+}
+
+#graph-container {
   flex-grow: 1;
   border: solid 1px #aaa;
+
+  overflow: auto;
+}
+
+#graph {
+  background-image:
+    linear-gradient(rgba(200, 200, 200, .5) .1em, transparent .1em),
+    linear-gradient(90deg, rgba(200, 200, 200, .5) .1em, transparent .1em)
+  ;
+  height: 200vh;
+  width: 100vw;
+  background-size: 3em 3em;
+
+  position: relative;
+}
+
+/* ====================================== */
+
+#questionnaire-container {
+  width: 500px;
+  border: solid 1px #aaa;
+  padding: 1rem;
+}
+#questionnaire {
+  padding: 1rem;
+  border: solid 1px #aaa;
+  background-color: #E6E5E5;
+}
+
+#questionnaire .questionnaire-option {
+  display: block;
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+
+/* ======================================== */
+.jstree-default .jstree-node {
+  margin-left: 16px;
+  border-left: dotted 1px #aaa;
+}
+
+.jstree-icon {
+  font-style: normal;
+}
+
+.jstree-default .jstree-icon:empty {
+  margin-left: 5px;
+}
+
+/* ======================================== */
+
+.tree-node--node {
+  font-weight: bold;
+  color: #462F30;
+}
+
+.tree-node--node {
+  margin-left: 24px;
+}
+
+.tree-node--node > .jstree-icon::before {
+  content: '📦'
+}
+
+
+.tree-node--option {
+  font-weight: lighter;
+  color: #000;
+}
+
+.tree-node--option > .jstree-icon::before {
+  content: '◼️';
+}
+
+/* ======================================= */
+.draggable {
+  cursor: move;
+  background-color: #0005;
+}
+
+#graph canvas {
+  position: absolute !important;
+  top: 0;
+  left: 0;
 }

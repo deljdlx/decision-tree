@@ -1,0 +1,87 @@
+{
+    "caption": "Test de personnalité",
+    "options": {
+        "1": {
+            "type": "option",
+            "value": 1,
+            "caption": "Êtes-vous plutôt introverti ou extraverti ?",
+            "child": {
+                "caption": "Préférez-vous passer du temps seul ou en compagnie d'autres personnes ?",
+                "options": {
+                    "1": {
+                        "type": "option",
+                        "value": "introvert",
+                        "caption": "Seul",
+                        "child": null,
+                        "data": {}
+                    },
+                    "2": {
+                        "type": "option",
+                        "value": "extravert",
+                        "caption": "En compagnie d'autres personnes",
+                        "child": null,
+                        "data": {}
+                    }
+                },
+                "type": "node"
+            },
+            "data": {}
+        },
+        "2": {
+            "type": "option",
+            "value": 2,
+            "caption": "Êtes-vous plutôt rationnel ou émotionnel ?",
+            "child": {
+                "caption": "Comment prenez-vous vos décisions ?",
+                "options": {
+                    "1": {
+                        "type": "option",
+                        "value": "rational",
+                        "caption": "De manière rationnelle, en pesant le pour et le contre",
+                        "child": null,
+                        "data": {}
+                    },
+                    "2": {
+                        "type": "option",
+                        "value": "emotional",
+                        "caption": "De manière émotionnelle, en suivant mon instinct",
+                        "child": null,
+                        "data": {}
+                    }
+                },
+                "type": "node"
+            },
+            "data": {}
+        },
+        "3": {
+            "type": "option",
+            "value": 3,
+            "caption": "Préférez-vous les activités calmes ou les activités stimulantes ?",
+            "child": {
+                "caption": "Quel type d'activités préférez-vous ?",
+                "options": {
+                    "1": {
+                        "type": "option",
+                        "value": "quiet",
+                        "caption": "Des activités calmes comme la lecture, le dessin ou la méditation",
+                        "child": null,
+                        "data": {}
+                    },
+                    "2": {
+                        "type": "option",
+                        "value": "stimulating",
+                        "caption": "Des activités stimulantes comme le sport, les jeux vidéo ou les sorties entre amis",
+                        "child": null,
+                        "data": {}
+                    }
+                },
+                "type": "node"
+            },
+            "data": {}
+        }
+    },
+    "type": "node",
+    "data": {
+        "test": "Test de personnalité : répondez aux questions pour mieux vous connaître !"
+    }
+}

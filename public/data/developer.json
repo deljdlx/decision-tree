@@ -1,0 +1,355 @@
+{
+    "caption": "Quel est ton niveau en développement ?",
+    "options": {
+        "1": {
+            "type": "option",
+            "value": 0,
+            "caption": "Débutant complet",
+            "child": {
+                "caption": "As tu suivi une formation scientifique ?",
+                "options": {
+                    "1": {
+                        "type": "option",
+                        "value": null,
+                        "caption": "Oui",
+                        "child": null,
+                        "data": {}
+                    },
+                    "2": {
+                        "type": "option",
+                        "value": null,
+                        "caption": "Non",
+                        "child": {
+                            "caption": "Quel est ton niveau d'anglais ?",
+                            "options": {
+                                "1": {
+                                    "type": "option",
+                                    "value": null,
+                                    "caption": "Débutant total",
+                                    "child": null,
+                                    "data": {}
+                                },
+                                "2": {
+                                    "type": "option",
+                                    "value": null,
+                                    "caption": "Je peux lire l'Anglais sans trop de soucis",
+                                    "child": null,
+                                    "data": {}
+                                },
+                                "3": {
+                                    "type": "option",
+                                    "value": null,
+                                    "caption": "Aucun problème !",
+                                    "child": null,
+                                    "data": {}
+                                }
+                            },
+                            "type": "node",
+                            "data": {}
+                        },
+                        "data": {}
+                    }
+                },
+                "type": "node",
+                "data": {}
+            },
+            "data": {}
+        },
+        "2": {
+            "type": "option",
+            "value": 1,
+            "caption": "J'ai déjà un peu codé",
+            "child": {
+                "caption": "As tu déjà fais une page html ?",
+                "options": {
+                    "1": {
+                        "type": "option",
+                        "value": null,
+                        "caption": "Oui",
+                        "child": null,
+                        "data": {}
+                    },
+                    "2": {
+                        "type": "option",
+                        "value": null,
+                        "caption": "Non",
+                        "child": null,
+                        "data": {}
+                    },
+                    "3": {
+                        "type": "option",
+                        "value": null,
+                        "caption": "Je ne sais pas ce qu'est le html",
+                        "child": null,
+                        "data": {}
+                    }
+                },
+                "type": "node",
+                "data": {}
+            },
+            "data": {}
+        },
+        "3": {
+            "type": "option",
+            "value": null,
+            "caption": "J'ai un niveau junior",
+            "child": {
+                "caption": "As tu travaillé professionnellement en tant que développeur ?",
+                "options": {
+                    "1": {
+                        "type": "option",
+                        "value": null,
+                        "caption": "Oui",
+                        "child": {
+                            "caption": "Tu travaillais plutôt sur quelle partie ?",
+                            "options": {
+                                "1": {
+                                    "type": "option",
+                                    "caption": "Front",
+                                    "child": null,
+                                    "data": {}
+                                },
+                                "2": {
+                                    "type": "option",
+                                    "caption": "Back",
+                                    "child": null,
+                                    "data": {}
+                                },
+                                "3": {
+                                    "type": "option",
+                                    "caption": "Full-stack",
+                                    "child": null,
+                                    "data": {}
+                                },
+                                "4": {
+                                    "type": "option",
+                                    "caption": "Ops",
+                                    "child": null,
+                                    "data": {}
+                                }
+                            },
+                            "type": "node",
+                            "data": {}
+                        },
+                        "data": {}
+                    },
+                    "2": {
+                        "type": "option",
+                        "value": null,
+                        "caption": "Non",
+                        "child": {
+                            "caption": "As tu déjà passé des tests techniques ?",
+                            "options": {
+                                "1": {
+                                    "type": "option",
+                                    "value": null,
+                                    "caption": "Oui",
+                                    "child": {
+                                        "caption": "Ont-ils étaient validés ?",
+                                        "options": {
+                                            "1": {
+                                                "type": "option",
+                                                "value": null,
+                                                "caption": "Oui",
+                                                "child": {
+                                                    "caption": "Pourquoi tu n'as pas obtenu le poste ?",
+                                                    "options": {
+                                                        "1": {
+                                                            "type": "option",
+                                                            "value": null,
+                                                            "caption": "Le poste ne me plaisait pas",
+                                                            "child": null,
+                                                            "data": {}
+                                                        },
+                                                        "2": {
+                                                            "type": "option",
+                                                            "value": null,
+                                                            "caption": "Mon profile ne correspondait pas",
+                                                            "child": null,
+                                                            "data": {}
+                                                        },
+                                                        "3": {
+                                                            "type": "option",
+                                                            "value": null,
+                                                            "caption": "Mes prétentions salariales ne correspondaient pas",
+                                                            "child": null,
+                                                            "data": {}
+                                                        },
+                                                        "4": {
+                                                            "type": "option",
+                                                            "value": null,
+                                                            "caption": "Je ne sais pas",
+                                                            "child": null,
+                                                            "data": {}
+                                                        }
+                                                    },
+                                                    "type": "node",
+                                                    "data": {}
+                                                },
+                                                "data": {}
+                                            },
+                                            "2": {
+                                                "type": "option",
+                                                "value": null,
+                                                "caption": "Non",
+                                                "child": {
+                                                    "caption": "Quel point a fait défaut ?",
+                                                    "options": {
+                                                        "1": {
+                                                            "type": "option",
+                                                            "value": null,
+                                                            "caption": "Algorithme",
+                                                            "child": null,
+                                                            "data": {}
+                                                        },
+                                                        "2": {
+                                                            "type": "option",
+                                                            "value": null,
+                                                            "caption": "Structure de données",
+                                                            "child": null,
+                                                            "data": {}
+                                                        },
+                                                        "3": {
+                                                            "type": "option",
+                                                            "value": null,
+                                                            "caption": "Clean code",
+                                                            "child": null,
+                                                            "data": {}
+                                                        },
+                                                        "4": {
+                                                            "type": "option",
+                                                            "value": null,
+                                                            "caption": "Je ne sais pas",
+                                                            "child": null,
+                                                            "data": {}
+                                                        }
+                                                    },
+                                                    "type": "node",
+                                                    "data": {}
+                                                },
+                                                "data": {}
+                                            }
+                                        },
+                                        "type": "node",
+                                        "data": {}
+                                    },
+                                    "data": {}
+                                },
+                                "2": {
+                                    "type": "option",
+                                    "value": null,
+                                    "caption": "Non",
+                                    "child": null,
+                                    "data": {}
+                                }
+                            },
+                            "type": "node",
+                            "data": {}
+                        },
+                        "data": {}
+                    }
+                },
+                "type": "node",
+                "data": {}
+            },
+            "data": {}
+        },
+        "4": {
+            "type": "option",
+            "value": -1,
+            "caption": "J'ai un niveau intermédiaire",
+            "child": {
+                "caption": "As tu travaillé professionnellement en tant que développeur ?",
+                "options": {
+                    "1": {
+                        "type": "option",
+                        "caption": "Oui",
+                        "child": {
+                            "caption": "Tu travaillais plutôt sur quelle partie ?",
+                            "options": {
+                                "1": {
+                                    "type": "option",
+                                    "value": null,
+                                    "caption": "Front",
+                                    "child": null,
+                                    "data": {}
+                                },
+                                "2": {
+                                    "type": "option",
+                                    "value": null,
+                                    "caption": "Back",
+                                    "child": null,
+                                    "data": {}
+                                },
+                                "3": {
+                                    "type": "option",
+                                    "value": null,
+                                    "caption": "Full-stack",
+                                    "child": null,
+                                    "data": {}
+                                },
+                                "4": {
+                                    "type": "option",
+                                    "value": null,
+                                    "caption": "Ops",
+                                    "child": null,
+                                    "data": {}
+                                }
+                            },
+                            "type": "node",
+                            "data": {}
+                        },
+                        "data": {}
+                    },
+                    "2": {
+                        "type": "option",
+                        "caption": "Non",
+                        "child": null,
+                        "data": {}
+                    }
+                },
+                "type": "node",
+                "data": {}
+            },
+            "data": {}
+        },
+        "5": {
+            "type": "option",
+            "value": null,
+            "caption": "J'ai déjà beaucoup d'expérience",
+            "child": {
+                "caption": "Quel est ton nombre d'années d'expérience ?",
+                "options": {
+                    "1": {
+                        "type": "option",
+                        "value": null,
+                        "caption": "Moins de 3 ans",
+                        "child": null,
+                        "data": {}
+                    },
+                    "2": {
+                        "type": "option",
+                        "value": null,
+                        "caption": "Entre 3 et 5 ans",
+                        "child": null,
+                        "data": {}
+                    },
+                    "3": {
+                        "type": "option",
+                        "value": null,
+                        "caption": "Plus de 5 ans",
+                        "child": null,
+                        "data": {}
+                    }
+                },
+                "type": "node",
+                "data": {}
+            },
+            "data": {}
+        }
+    },
+    "type": "node",
+    "data": {
+        "test": "NODE DATA hello world"
+    }
+}

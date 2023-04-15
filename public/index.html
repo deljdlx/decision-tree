@@ -8,17 +8,39 @@
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.2.2/dist/echarts.min.js"></script>
     <title>Tree builder</title>
 
-    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.11/themes/default/style.min.css" />
+    <link rel="stylesheet" href="./css/style.css" />
 
 
 </head>
 
 <body>
     <div id="workspace">
-        <div id='tree-container'></div>
-        <div id="graph"></div>
+        <div id="data-container">
+            <div id="jstree-container"></div>
+            <div id="node-data"></div>
+        </div>
+
+        <!-- <div id='tree-container'></div> -->
+
+        <div id="graph-container">
+            <div id="graph"></div>
+        </div>
+
+
+        <div id="questionnaire-container">
+            <img src="./images/teacher.webp" style="width: 100%" />
+            <div id="questionnaire"></div>
+        </div>
     </div>
 
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.11/jstree.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ext-language_tools.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.13.5/beautify.min.js"></script>
 
 
 
@@ -30,24 +52,150 @@
     <script src="./src/js/AddOptionForm.js"></script>
 
     <script src="./src/js/EchartRenderer.js"></script>
+    <script src="./src/js/JSTreeRenderer.js"></script>
+
+    <script src="./src/js/QuestionnaireRenderer.js"></script>
 
 
 
     <script>
-        const container = document.getElementById('graph');
-        const renderer = new EchartRenderer();
+        fetch('./data/developer.json').then((response) => response.json())
+            .then(data => {
+                const tree = TreeNode.fromJSON(data);
+
+                const container = document.getElementById('graph');
+                const echartRenderer = new EchartRenderer();
+
+                const jsTreeRenderer = new JSTreeRenderer(tree);
+                jsTreeRenderer.render([], '#jstree-container');
+
+                ace.config.setModuleUrl('ace/mode/json',
+                    'https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/mode-json.js');
+
+                // Activation de la beautification de code
+                ace.require("ace/ext/beautify");
+
+                // Initialiser l'éditeur
+                var editor = ace.edit("node-data");
+                editor.setTheme("ace/theme/monokai");
+                editor.commands.addCommand({
+                    name: "beautify",
+                    bindKey: {
+                        win: "Ctrl-Shift-B",
+                        mac: "Command-Shift-B"
+                    },
+                    exec: function (editor) {
+                        var session = editor.getSession();
+                        session.setValue(js_beautify(session.getValue()));
+                    },
+                    readOnly: true
+                });
 
 
-        const isFlying = new TreeNode('Est ce que cet animal vole', null, (node) => {
-            renderer.render(container, isFlying);
+                editor.getSession().setMode("ace/mode/json");
+                const json = JSON.stringify(tree.toJSON());
+                editor.setValue(js_beautify(json));
+
+
+
+                tree.setChangeCallback(() => {
+                    const json = JSON.stringify(tree.toJSON());
+                    const data = tree.toJSON();
+
+                    console.log('%cindex.html :: 42 =============================',
+                        'color: #f00; font-size: 1rem');
+                    console.log(data);
+                    console.log(json);
+
+                    echartRenderer.render(container, tree);
+                    // jsTreeRenderer.loadData(data);
+
+                    editor.setValue(js_beautify(json));
+
+                });
+
+                echartRenderer.render(container, tree);
+                jsTreeRenderer.loadData(data);
+
+
+                const questionnaire = new Questionnaire(tree.toJSON(), document.querySelector('#questionnaire'));
+                questionnaire.render();
+
+
+
+                setTimeout(() => {
+
+                    const draggable = document.querySelector('#graph canvas');
+                    draggable.classList.add('draggable')
+
+                    // On ajoute un événement "mousedown" sur la div
+                    draggable.addEventListener('mousedown', (e) => {
+
+                        let offsetX = draggable.offsetLeft;
+                        let offsetY = draggable.offsetTop;
+
+
+                        // On stocke la position de départ
+                        startX = e.clientX - offsetX;
+                        startY = e.clientY - offsetY;
+
+                        // On ajoute un événement "mousemove" sur le document
+                        document.addEventListener('mousemove', onMouseMove);
+
+                        // On ajoute un événement "mouseup" sur le document
+                        document.addEventListener('mouseup', onMouseUp);
+                    });
+
+                    // Fonction appelée lors du mouvement de la souris
+                    function onMouseMove(e) {
+                        // On calcule la nouvelle position de la div
+                        const newPosX = e.clientX - startX;
+                        const newPosY = e.clientY - startY;
+
+                        // On définit la nouvelle position de la div
+                        draggable.style.left = newPosX + 'px';
+                        draggable.style.top = newPosY + 'px';
+                    }
+
+                    // Fonction appelée lors du relâchement du clic de la souris
+                    function onMouseUp() {
+                        // On supprime les événements "mousemove" et "mouseup" du document
+                        document.removeEventListener('mousemove', onMouseMove);
+                        document.removeEventListener('mouseup', onMouseUp);
+                    }
+                }, 500);
+
+
+
+            });
+
+
+
+
+        // const ui = new TreeNodeUI(tree);
+        // document.querySelector('#tree-container').append(ui.render());
+
+        //*/
+        /*
+        const tree = new TreeNode('Est ce que cet animal vole', null, (node) => {
+            const json = JSON.stringify(tree.toJSON());
+            const data = tree.toJSON();
+
+            console.log('%cindex.html :: 42 =============================', 'color: #f00; font-size: 1rem');
+            console.log(data);
+            console.log(json);
+            echartRenderer.render(container, tree);
+
+            jsTreeRenderer.loadData(data);
+
+            // console.log('%cindex.html :: 61 =============================', 'color: #f00; font-size: 1rem');
+            // console.log(jsTreeRenderer.exportToTreeNode());
         });
 
 
-
-
-        const yes = isFlying.createOption(1, 'Oui');
-        isFlying.createOption(0, 'Non');
-        isFlying.createOption(-1, 'Passer');
+        const yes = tree.createOption(1, 'Oui');
+        tree.createOption(0, 'Non');
+        tree.createOption(-1, 'Passer');
 
 
         const hasFeather = yes.setChild(
@@ -57,11 +205,7 @@
         hasFeather.createOption(1, 'Oui');
         hasFeather.createOption(0, 'Non');
 
-
-        const ui = new TreeNodeUI(isFlying);
-        document.querySelector('#tree-container').append(ui.render());
-
-
+        //*/
     </script>
 
 </body>

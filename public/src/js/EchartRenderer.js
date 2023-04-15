@@ -3,11 +3,36 @@ class EchartRenderer {
   chart = null;
 
 
+  formatCaption(caption, number = 3) {
+    const words = caption.split(' ');
+    let newStr = '';
+    for (let i = 0; i < words.length; i++) {
+      if (i > 0 && i % number === 0) {
+        newStr += '\n';
+      }
+      newStr += words[i] + ' ';
+    }
+    return newStr;
+  }
+
 
   transformData(node) {
+
+
+    const caption = this.formatCaption('📦' + node.caption);
+
+
     const result = {
-      name: node.caption,
-      children: []
+      name: caption,
+      children: [],
+      label: {
+        color: '#fff',
+        backgroundColor: '#555',
+        padding: 5,
+        borderColor: '#9AA8E8',
+        borderWidth: 3,
+        borderRadius: 5,
+      }
     };
 
     for (const key in node.options) {
@@ -21,8 +46,16 @@ class EchartRenderer {
       }
 
       result.children.push({
-        name: option.caption,
+        name: this.formatCaption('◼️' + option.caption),
         children: children,
+        label: {
+          color: '#000',
+          backgroundColor: '#eee',
+          padding: 5,
+          borderColor: '#9AA8E8',
+          borderWidth: 1,
+          borderRadius: 5,
+        }
       });
 
     }
@@ -34,8 +67,6 @@ class EchartRenderer {
 
       const data = tree.toJSON();
       const treeData = this.transformData(data);
-
-      console.log(treeData)
 
       // Créer un conteneur pour le graphique
 
@@ -53,9 +84,15 @@ class EchartRenderer {
       const option = {
         series: [{
           type: 'tree',
-          initialTreeDepth: 10,
+          initialTreeDepth: 30,
 
           data: [treeData],
+
+          lineStyle: {
+            color: '#000',
+            curveness: 0.3,
+            width: 5,
+          },
 
           left: '2%',
           right: '2%',
@@ -63,12 +100,12 @@ class EchartRenderer {
           bottom: '20%',
 
           symbol: 'emptyCircle',
-
           orient: 'vertical',
 
-          expandAndCollapse: true,
+          expandAndCollapse: false,
 
           label: {
+            color: '#a00',
             position: 'top',
             rotate: 0,
             verticalAlign: 'middle',

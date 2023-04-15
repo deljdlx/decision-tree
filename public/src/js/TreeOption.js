@@ -2,7 +2,12 @@ class TreeOption {
   node = null;
   value = null;
   caption = null;
+
+  // child store the child tree node
   child = null;
+
+  data = {};
+
   renderer = null;
   _isSelected = false;
 
@@ -15,6 +20,15 @@ class TreeOption {
     this.child = child;
 
     this.changeCallback = changeCallback;
+  }
+
+  getData() {
+    return this.data;
+  }
+
+  setData(data) {
+    this.data = data;
+    return this;
   }
 
   update() {
@@ -81,9 +95,11 @@ class TreeOption {
 
   toJSON() {
     return {
+      type: 'option',
       value: this.value,
       caption: this.caption,
       child: this.child ? this.child.toJSON() : null,
+      data: this.getData(),
     };
   }
 
@@ -92,14 +108,16 @@ class TreeOption {
       value,
       caption,
       child,
+      data,
     } = json;
 
-    const treeValue = new TreeOption(node, value, caption);
+    const option = new TreeOption(node, value, caption);
+    option.setData(data);
 
     if (child) {
       const childNode = TreeNode.fromJSON(child);
-      treeValue.setChild(childNode);
+      option.setChild(childNode);
     }
-    return treeValue;
+    return option;
   }
 }
