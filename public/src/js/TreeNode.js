@@ -5,15 +5,42 @@ class TreeNode {
 
   options = {};
   caption = '';
+  id = null;
   data = {};
 
   renderer = null;
-  changeCallback = null;
 
-  constructor(caption, option = null, changeCallback = null) {
+  eventListeners = {};
+
+  constructor(caption, option = null) {
     this.caption = caption;
     this.option = option;
-    this.changeCallback = changeCallback;
+  }
+
+
+
+
+  addEventListener(eventName, callback) {
+    if(typeof(this.eventListeners[eventName]) === 'undefined') {
+      this.eventListeners[eventName] = [];
+    }
+
+    this.eventListeners[eventName].push(callback);
+  }
+
+  fireEvent(eventName, data) {
+    if(typeof(this.eventListeners[eventName]) !== 'undefined') {
+      this.eventListeners[eventName].forEach(listener => {
+        listener(data);
+      });
+    }
+  }
+
+
+
+  setId(id) {
+    this.id = id;
+    return this;
   }
 
   getData() {
@@ -25,26 +52,11 @@ class TreeNode {
     return this;
   }
 
-  setChangeCallback(changeCallback) {
-    this.changeCallback = changeCallback;
-  }
-
-  update() {
-    if (this.changeCallback) {
-      this.changeCallback(this);
-    }
-
-    if (this.option) {
-      this.option.node.update();
-    }
-  }
 
   remove() {
     if (this.option !== null) {
       this.option.setChild(null);
     }
-
-    this.update();
   }
 
   /**
@@ -69,14 +81,16 @@ class TreeNode {
     return this.options[name];
   }
 
-  createOption(value, caption) {
-    const treeValue = new TreeOption(this, value, caption);
-    const key = Object.values(this.options).length + 1 ;
-    this.options[key] = treeValue;
+  createOption(caption) {
+    const option = new TreeOption(this, caption);
+    this.addOption(option);
 
-    this.update();
+    return option;
+  }
 
-    return treeValue;
+  addOption(option) {
+    this.options[option.id] = option;
+    return option;
   }
 
   removeOption(optionToDelete) {
@@ -86,8 +100,6 @@ class TreeNode {
       if (option === optionToDelete) {
         delete this.options[key];
         this.getRenderer().refresh();
-
-        this.update();
 
         return;
       }
@@ -100,6 +112,18 @@ class TreeNode {
     }
   }
 
+  static generateUUID() {
+    let d = new Date().getTime();
+    if (typeof performance !== 'undefined' && typeof performance.now === 'function'){
+      d += performance.now(); //ajoute la performance si disponible pour une plus grande unicité
+    }
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      const r = (d + Math.random() * 16) % 16 | 0;
+      d = Math.floor(d / 16);
+      return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    });
+  }
+
   toJSON() {
     const options = {};
     for (const key in this.options) {
@@ -108,6 +132,7 @@ class TreeNode {
     }
 
     return {
+      id: this.id,
       caption: this.caption,
       options: options,
       type: 'node',
@@ -115,33 +140,49 @@ class TreeNode {
     };
   }
 
-  loadData(data) {
-    this.caption = data.caption;
-    this.options = [];
-    this.data = data ? data : {};
+  loadData(descriptor) {
+    this.caption = descriptor.caption;
+    this.id = descriptor.id;
+    this.data = descriptor.data;
 
-    for (const key in data.options) {
-      const options = data.options;
-      const treeValue = TreeOption.fromJSON(this, options[key]);
-      this.createOption(treeValue.value, treeValue.caption).setChild(treeValue.child);
+    Object.values(this.options).forEach((option, index) => {
+      delete this.options[index];
+    })
+
+    for (const key in descriptor.options) {
+      const options = descriptor.options;
+      const option = TreeOption.fromJSON(this, options[key]);
+      this.addOption(option).setChild(option.child);
     }
 
-    this.refresh();
+    this.fireEvent('loaded', this.toJSON());
   }
 
-  static fromJSON(json) {
+  static fromJSON(json, parentOption = null) {
     const {
       caption,
+      id,
       options,
       data,
     } = json;
 
     const treeNode = new TreeNode(caption);
     treeNode.setData(data ? data : {});
+    if(parentOption) {
+      treeNode.setOption(parentOption);
+    }
+
+    if(id) {
+      treeNode.setId(id);
+    }
+    else {
+      treeNode.setId(TreeNode.generateUUID());
+    }
 
     for (const key in options) {
-      const treeValue = TreeOption.fromJSON(treeNode, options[key]);
-      treeNode.createOption(treeValue.value, treeValue.caption).setChild(treeValue.child);
+      const option = TreeOption.fromJSON(treeNode, options[key]);
+      treeNode.addOption(option);
+      option.setChild(option.child);
     }
 
     return treeNode;

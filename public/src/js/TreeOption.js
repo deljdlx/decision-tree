@@ -1,7 +1,8 @@
 class TreeOption {
   node = null;
-  value = null;
+
   caption = null;
+  id = null;
 
   // child store the child tree node
   child = null;
@@ -13,14 +14,32 @@ class TreeOption {
 
   changeCallback = null
 
-  constructor(node, value, caption, child = null, changeCallback = null) {
+  constructor(node, caption, child = null, changeCallback = null) {
     this.node = node;
-    this.value = value;
     this.caption = caption;
     this.child = child;
 
     this.changeCallback = changeCallback;
   }
+
+  setId(id) {
+    this.id = id;
+    return this;
+  }
+
+  static generateUUID() {
+    let d = new Date().getTime();
+    if (typeof performance !== 'undefined' && typeof performance.now === 'function'){
+      d += performance.now(); //ajoute la performance si disponible pour une plus grande unicité
+    }
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      const r = (d + Math.random() * 16) % 16 | 0;
+      d = Math.floor(d / 16);
+      return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    });
+  }
+
+
 
   getData() {
     return this.data;
@@ -29,14 +48,6 @@ class TreeOption {
   setData(data) {
     this.data = data;
     return this;
-  }
-
-  update() {
-    if (this.changeCallback) {
-      this.changeCallback(this);
-    }
-
-    this.node.update();
   }
 
   remove() {
@@ -67,9 +78,6 @@ class TreeOption {
       this.child.setOption(this);
     }
 
-    this.update();
-
-
     return node;
   }
 
@@ -77,45 +85,43 @@ class TreeOption {
     return this.caption;
   }
 
-  getValue() {
-    return this.value;
-  }
 
   getChild() {
     return this.child;
   }
 
-  isSelected(value = null) {
-    if (value !== null) {
-      this._isSelected = value;
-    }
-
-    return this._isSelected;
-  }
-
   toJSON() {
     return {
       type: 'option',
-      value: this.value,
+      id: this.id,
       caption: this.caption,
       child: this.child ? this.child.toJSON() : null,
       data: this.getData(),
     };
   }
 
-  static fromJSON(node, json) {
+
+  static fromJSON(node, descriptor) {
     const {
-      value,
+      id,
       caption,
       child,
       data,
-    } = json;
+    } = descriptor;
 
-    const option = new TreeOption(node, value, caption);
+    const option = new TreeOption(node, caption);
     option.setData(data);
 
+    if(id) {
+      option.setId(id);
+    }
+    else {
+      option.setId(TreeOption.generateUUID());
+    }
+
+
     if (child) {
-      const childNode = TreeNode.fromJSON(child);
+      const childNode = TreeNode.fromJSON(child, option);
       option.setChild(childNode);
     }
     return option;

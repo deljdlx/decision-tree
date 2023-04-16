@@ -1,44 +1,47 @@
 {
-    "caption": "Quel est ton niveau en développement ?",
+    "id": "a33ff3e2-0e6b-4974-bc76-86ef667490a8",
+    "caption": "Quel est ton niveau en développement ?!",
     "options": {
-        "1": {
+        "7b977bd5-a3f2-42be-8139-33a15b982680": {
             "type": "option",
-            "value": 0,
+            "id": "7b977bd5-a3f2-42be-8139-33a15b982680",
             "caption": "Débutant complet",
             "child": {
+                "id": "9929fa08-68de-4472-8b86-9818339157a4",
                 "caption": "As tu suivi une formation scientifique ?",
                 "options": {
-                    "1": {
+                    "cbf39fac-ebc4-4688-b877-dde66c14ad27": {
                         "type": "option",
-                        "value": null,
+                        "id": "cbf39fac-ebc4-4688-b877-dde66c14ad27",
                         "caption": "Oui",
                         "child": null,
                         "data": {}
                     },
-                    "2": {
+                    "b1c8d273-3237-483d-b1dd-a5934b3a3b0a": {
                         "type": "option",
-                        "value": null,
+                        "id": "b1c8d273-3237-483d-b1dd-a5934b3a3b0a",
                         "caption": "Non",
                         "child": {
+                            "id": "37ce7e4f-33c5-431d-951a-128f599a623e",
                             "caption": "Quel est ton niveau d'anglais ?",
                             "options": {
-                                "1": {
+                                "1a9d0f3c-b43b-4a6d-a1f7-158bbb7c8281": {
                                     "type": "option",
-                                    "value": null,
+                                    "id": "1a9d0f3c-b43b-4a6d-a1f7-158bbb7c8281",
                                     "caption": "Débutant total",
                                     "child": null,
                                     "data": {}
                                 },
-                                "2": {
+                                "561c0f4e-3fd4-4d94-aac8-2c14d00a413f": {
                                     "type": "option",
-                                    "value": null,
+                                    "id": "561c0f4e-3fd4-4d94-aac8-2c14d00a413f",
                                     "caption": "Je peux lire l'Anglais sans trop de soucis",
                                     "child": null,
                                     "data": {}
                                 },
-                                "3": {
+                                "c188384c-26a2-4946-bf8b-47e87d8ae48f": {
                                     "type": "option",
-                                    "value": null,
+                                    "id": "c188384c-26a2-4946-bf8b-47e87d8ae48f",
                                     "caption": "Aucun problème !",
                                     "child": null,
                                     "data": {}
@@ -55,30 +58,31 @@
             },
             "data": {}
         },
-        "2": {
+        "ce0cebc9-8c77-4933-a602-b0f51729e875": {
             "type": "option",
-            "value": 1,
+            "id": "ce0cebc9-8c77-4933-a602-b0f51729e875",
             "caption": "J'ai déjà un peu codé",
             "child": {
-                "caption": "As tu déjà fais une page html ?",
+                "id": "2fdac803-ad3a-43ca-b51a-6251a2129e61",
+                "caption": "As tu déjà fais une page html ?!",
                 "options": {
-                    "1": {
+                    "f6dd0fa7-acc1-42db-a461-83f78bb622e2": {
                         "type": "option",
-                        "value": null,
+                        "id": "f6dd0fa7-acc1-42db-a461-83f78bb622e2",
                         "caption": "Oui",
                         "child": null,
                         "data": {}
                     },
-                    "2": {
+                    "10a82939-660c-4371-8339-d13a9df3cff6": {
                         "type": "option",
-                        "value": null,
+                        "id": "10a82939-660c-4371-8339-d13a9df3cff6",
                         "caption": "Non",
                         "child": null,
                         "data": {}
                     },
-                    "3": {
+                    "8854d05b-6840-484a-82e4-e115e86fa73e": {
                         "type": "option",
-                        "value": null,
+                        "id": "8854d05b-6840-484a-82e4-e115e86fa73e",
                         "caption": "Je ne sais pas ce qu'est le html",
                         "child": null,
                         "data": {}
@@ -89,40 +93,46 @@
             },
             "data": {}
         },
-        "3": {
+        "5826c61d-1641-4bae-95a9-91fac892405c": {
             "type": "option",
-            "value": null,
+            "id": "5826c61d-1641-4bae-95a9-91fac892405c",
             "caption": "J'ai un niveau junior",
             "child": {
+                "id": "6e440af8-8f51-4005-a0a1-430b2e4e656e",
                 "caption": "As tu travaillé professionnellement en tant que développeur ?",
                 "options": {
-                    "1": {
+                    "65abbac7-38f4-4a6c-8db8-edd6deb8a00c": {
                         "type": "option",
-                        "value": null,
+                        "id": "65abbac7-38f4-4a6c-8db8-edd6deb8a00c",
                         "caption": "Oui",
                         "child": {
+                            "id": "6ea2c369-4737-42cd-aeda-fc4b95b6ee2a",
                             "caption": "Tu travaillais plutôt sur quelle partie ?",
                             "options": {
-                                "1": {
+                                "1c323e36-f1c3-4375-94e1-bff92af5216e": {
                                     "type": "option",
+                                    "id": "1c323e36-f1c3-4375-94e1-bff92af5216e",
                                     "caption": "Front",
                                     "child": null,
                                     "data": {}
                                 },
-                                "2": {
+                                "0f09755a-034c-443e-a12d-ac7874fc3775": {
                                     "type": "option",
+                                    "id": "0f09755a-034c-443e-a12d-ac7874fc3775",
                                     "caption": "Back",
                                     "child": null,
                                     "data": {}
                                 },
-                                "3": {
+                                "89ef1d7d-8215-473c-96dc-529410671589": {
                                     "type": "option",
+                                    "id": "89ef1d7d-8215-473c-96dc-529410671589",
                                     "caption": "Full-stack",
                                     "child": null,
                                     "data": {}
                                 },
-                                "4": {
+                                "30327588-5310-415f-adcd-7ebf50544d5a": {
                                     "type": "option",
+                                    "id": "30327588-5310-415f-adcd-7ebf50544d5a",
                                     "caption": "Ops",
                                     "child": null,
                                     "data": {}
@@ -133,51 +143,54 @@
                         },
                         "data": {}
                     },
-                    "2": {
+                    "16660630-be57-4fcb-b752-af315a00dba5": {
                         "type": "option",
-                        "value": null,
+                        "id": "16660630-be57-4fcb-b752-af315a00dba5",
                         "caption": "Non",
                         "child": {
+                            "id": "6c7efbab-d045-41c0-b47e-18bd6cbb12f4",
                             "caption": "As tu déjà passé des tests techniques ?",
                             "options": {
-                                "1": {
+                                "34ff6ebb-c317-4977-af53-492445d0931f": {
                                     "type": "option",
-                                    "value": null,
+                                    "id": "34ff6ebb-c317-4977-af53-492445d0931f",
                                     "caption": "Oui",
                                     "child": {
+                                        "id": "478fc515-02b1-4ece-aa45-5766f4a3dcb8",
                                         "caption": "Ont-ils étaient validés ?",
                                         "options": {
-                                            "1": {
+                                            "77dfae3b-731a-4e0e-a28b-4f1cdb38578b": {
                                                 "type": "option",
-                                                "value": null,
+                                                "id": "77dfae3b-731a-4e0e-a28b-4f1cdb38578b",
                                                 "caption": "Oui",
                                                 "child": {
+                                                    "id": "f21a5555-e550-4af9-b1a3-6dccc998f314",
                                                     "caption": "Pourquoi tu n'as pas obtenu le poste ?",
                                                     "options": {
-                                                        "1": {
+                                                        "291f4651-d6fc-4b0f-bd6b-e52aeaf18a26": {
                                                             "type": "option",
-                                                            "value": null,
+                                                            "id": "291f4651-d6fc-4b0f-bd6b-e52aeaf18a26",
                                                             "caption": "Le poste ne me plaisait pas",
                                                             "child": null,
                                                             "data": {}
                                                         },
-                                                        "2": {
+                                                        "08cfbf35-0750-4e90-8cff-ae70bf7d40db": {
                                                             "type": "option",
-                                                            "value": null,
+                                                            "id": "08cfbf35-0750-4e90-8cff-ae70bf7d40db",
                                                             "caption": "Mon profile ne correspondait pas",
                                                             "child": null,
                                                             "data": {}
                                                         },
-                                                        "3": {
+                                                        "edde0e36-4e22-4c40-9405-8cd0e3ee82aa": {
                                                             "type": "option",
-                                                            "value": null,
+                                                            "id": "edde0e36-4e22-4c40-9405-8cd0e3ee82aa",
                                                             "caption": "Mes prétentions salariales ne correspondaient pas",
                                                             "child": null,
                                                             "data": {}
                                                         },
-                                                        "4": {
+                                                        "6d47d7e2-acfe-4f5a-b1c4-2b25b52c3b58": {
                                                             "type": "option",
-                                                            "value": null,
+                                                            "id": "6d47d7e2-acfe-4f5a-b1c4-2b25b52c3b58",
                                                             "caption": "Je ne sais pas",
                                                             "child": null,
                                                             "data": {}
@@ -188,37 +201,38 @@
                                                 },
                                                 "data": {}
                                             },
-                                            "2": {
+                                            "28ef0ecc-e859-4551-a49c-32ebab02247d": {
                                                 "type": "option",
-                                                "value": null,
+                                                "id": "28ef0ecc-e859-4551-a49c-32ebab02247d",
                                                 "caption": "Non",
                                                 "child": {
+                                                    "id": "2cfb893f-33ba-4514-9a67-dbbd12e906aa",
                                                     "caption": "Quel point a fait défaut ?",
                                                     "options": {
-                                                        "1": {
+                                                        "c7de6c4a-43e9-40e1-a801-0609059d7497": {
                                                             "type": "option",
-                                                            "value": null,
+                                                            "id": "c7de6c4a-43e9-40e1-a801-0609059d7497",
                                                             "caption": "Algorithme",
                                                             "child": null,
                                                             "data": {}
                                                         },
-                                                        "2": {
+                                                        "04dc1f60-4cef-40a4-81ad-a717f6d9878e": {
                                                             "type": "option",
-                                                            "value": null,
+                                                            "id": "04dc1f60-4cef-40a4-81ad-a717f6d9878e",
                                                             "caption": "Structure de données",
                                                             "child": null,
                                                             "data": {}
                                                         },
-                                                        "3": {
+                                                        "f0f8d2e4-fc2d-42ae-89ea-d368ac8a4b1e": {
                                                             "type": "option",
-                                                            "value": null,
+                                                            "id": "f0f8d2e4-fc2d-42ae-89ea-d368ac8a4b1e",
                                                             "caption": "Clean code",
                                                             "child": null,
                                                             "data": {}
                                                         },
-                                                        "4": {
+                                                        "26b8f03e-8477-423b-8268-9d2374c7230a": {
                                                             "type": "option",
-                                                            "value": null,
+                                                            "id": "26b8f03e-8477-423b-8268-9d2374c7230a",
                                                             "caption": "Je ne sais pas",
                                                             "child": null,
                                                             "data": {}
@@ -235,9 +249,9 @@
                                     },
                                     "data": {}
                                 },
-                                "2": {
+                                "ba8207a9-8982-4c22-b81b-30f54dc703e0": {
                                     "type": "option",
-                                    "value": null,
+                                    "id": "ba8207a9-8982-4c22-b81b-30f54dc703e0",
                                     "caption": "Non",
                                     "child": null,
                                     "data": {}
@@ -254,89 +268,31 @@
             },
             "data": {}
         },
-        "4": {
+        "4cbed0fd-af3c-4424-9ddf-62ed94308345": {
             "type": "option",
-            "value": -1,
-            "caption": "J'ai un niveau intermédiaire",
-            "child": {
-                "caption": "As tu travaillé professionnellement en tant que développeur ?",
-                "options": {
-                    "1": {
-                        "type": "option",
-                        "caption": "Oui",
-                        "child": {
-                            "caption": "Tu travaillais plutôt sur quelle partie ?",
-                            "options": {
-                                "1": {
-                                    "type": "option",
-                                    "value": null,
-                                    "caption": "Front",
-                                    "child": null,
-                                    "data": {}
-                                },
-                                "2": {
-                                    "type": "option",
-                                    "value": null,
-                                    "caption": "Back",
-                                    "child": null,
-                                    "data": {}
-                                },
-                                "3": {
-                                    "type": "option",
-                                    "value": null,
-                                    "caption": "Full-stack",
-                                    "child": null,
-                                    "data": {}
-                                },
-                                "4": {
-                                    "type": "option",
-                                    "value": null,
-                                    "caption": "Ops",
-                                    "child": null,
-                                    "data": {}
-                                }
-                            },
-                            "type": "node",
-                            "data": {}
-                        },
-                        "data": {}
-                    },
-                    "2": {
-                        "type": "option",
-                        "caption": "Non",
-                        "child": null,
-                        "data": {}
-                    }
-                },
-                "type": "node",
-                "data": {}
-            },
-            "data": {}
-        },
-        "5": {
-            "type": "option",
-            "value": null,
+            "id": "4cbed0fd-af3c-4424-9ddf-62ed94308345",
             "caption": "J'ai déjà beaucoup d'expérience",
             "child": {
+                "id": "71b652de-781d-4fde-b958-3a88941779cb",
                 "caption": "Quel est ton nombre d'années d'expérience ?",
                 "options": {
-                    "1": {
+                    "04b473e5-acea-4546-a470-4a4d0c8a5a0f": {
                         "type": "option",
-                        "value": null,
+                        "id": "04b473e5-acea-4546-a470-4a4d0c8a5a0f",
                         "caption": "Moins de 3 ans",
                         "child": null,
                         "data": {}
                     },
-                    "2": {
+                    "ce02e16e-e34a-4a39-bb24-46f0639451df": {
                         "type": "option",
-                        "value": null,
+                        "id": "ce02e16e-e34a-4a39-bb24-46f0639451df",
                         "caption": "Entre 3 et 5 ans",
                         "child": null,
                         "data": {}
                     },
-                    "3": {
+                    "a608a8cc-2516-4798-be8e-dabda773c865": {
                         "type": "option",
-                        "value": null,
+                        "id": "a608a8cc-2516-4798-be8e-dabda773c865",
                         "caption": "Plus de 5 ans",
                         "child": null,
                         "data": {}
@@ -348,8 +304,5 @@
             "data": {}
         }
     },
-    "type": "node",
-    "data": {
-        "test": "NODE DATA hello world"
-    }
+    "type": "node"
 }

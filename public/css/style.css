@@ -1,35 +1,75 @@
+:root {
+
+  --color-highlight: #563A3C;
+  --color-highlight-2: #9AA8E8;
+
+  --scrollbar-width: 15px;
+}
+
 body {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-size: 11px;
   margin: 0;
   padding: 0;
+
+  overflow: hidden;
 }
 
 
 /* barre de défilement verticale */
 ::-webkit-scrollbar {
-  width: 20px;
+  width: var(--scrollbar-width);
   background-color: #E5E5E5;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #9AA8E8;
+  background-color: var(--color-highlight);
   border: solid 1px #000;
-  border-radius: 10px;
+  border-radius: calc(var(--scrollbar-width) / 2);
 }
 
 /* barre de défilement horizontale */
 ::-webkit-scrollbar-horizontal {
-  height: 10px;
+  height: var(--scrollbar-width);
   background-color: #E5E5E5;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #9AA8E8;
+  background-color: var(--color-highlight);
 }
 
 
 /* ======================================= */
+
+/*==================================*/
+
+#toolbar {
+  background-color: #333333;
+  height: 2rem;
+}
+
+#workspace {
+  display: flex;
+  flex-direction: row;
+  width: 100vw;
+  height: calc(100vh - 2rem);
+}
+
+#main-content-container {
+  flex-grow: 1;
+  border: solid 1px #aaa;
+  overflow: hidden;
+  max-height: 100%;
+}
+
+
+#right-panel {
+  width: 400px;
+}
+
+/* ======================================= */
+
+
 
 .node {
   border: solid 1px #aaa;
@@ -73,74 +113,7 @@ body {
 }
 
 
-/*==================================*/
 
-#toolbar {
-  background-color: #333333;
-  height: 2rem;
-}
-
-#workspace {
-  display: flex;
-  flex-direction: row;
-  width: 100vw;
-  height: calc(100vh - 2rem);
-}
-
-
-
-#right-panel {
-  /* width: 800px; */
-  display: flex;
-  flex-direction: row;
-  /* border: solid 10px #f00; */
-}
-
-#right-panel-content {
-  /* border: solid 10px #ff0; */
-  position: relative;
-  width:500px;
-}
-
-.right-panel-panel {
-  visibility: hidden;
-  top: 0;
-  left: 0;
-  position: absolute;
-  height: 100%;
-  width: 100%;
-}
-
-.right-panel-panel.active {
-  visibility: visible;
-}
-
-
-#data-container {
-  display: flex;
-  flex-direction: column;
-}
-
-#editor-container {
-
-  display: flex;
-  flex-direction: column;
-  background-color: #ff0; 
-  z-index: 200;
-}
-
-#data-toolbar {
-  background-color: #333333;
-  width: 2rem;
-  color: #aaa;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-#data-toolbar > * {
-  margin: 0.25rem 0;
-}
 
 
 #jstree-container {
@@ -155,10 +128,7 @@ body {
 }
 
 #graph-container {
-  flex-grow: 1;
-  border: solid 1px #aaa;
 
-  overflow: auto;
 }
 
 #graph {
@@ -176,7 +146,7 @@ body {
 /* ====================================== */
 
 #questionnaire-container {
-  width: 500px;
+  max-width: 300px;
   border: solid 1px #aaa;
   padding: 1rem;
 }
@@ -207,19 +177,75 @@ body {
   margin-left: 5px;
 }
 
+.jstree-node.tree-node--node {
+  border-left: solid 1px var(--color-highlight-2);
+  position: relative;
+}
+
+/* .jstree-node.tree-node--node.jstree-open::before {
+  content: "▼";
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-left: 12px;
+} */
+
+/*
+.jstree-node.tree-node--node::before {
+  content: "▶";
+  margin-left: 12px;
+}
+ */
+
+
+
 /* ======================================== */
+.jstree-icon {
+  padding-right: 0 !important;
+  /* background: none !important; */
+}
+
+.jstree-anchor {
+  line-height: 24px;
+  height: 24px;
+}
+
+.jstree-default .jstree-wholerow-clicked {
+  /* background: transparent; */
+}
+
 
 .tree-node--node {
-  font-weight: bold;
-  color: #462F30;
+  /* font-weight: bold; */
+  color: #fff;
 }
 
 .tree-node--node {
   margin-left: 24px;
 }
 
-.tree-node--node > .jstree-icon::before {
-  content: '📦'
+.tree-node--node > .jstree-anchor {
+  border: solid 1px var(--color-highlight-2);
+  border-radius: 24px !important;
+  background-color: #555555 !important;
+  padding: 0 8px;
+}
+
+.tree-node--node > .jstree-anchor::before {
+  content: '📦';
+  margin-right: 4px;
+}
+
+
+.jstree-node.tree-node--option.jstree-leaf .jstree-icon {
+  display: none;
+}
+
+
+.jstree-node.tree-node--option.jstree-leaf .jstree-anchor {
+  border-left: solid 1px var(--color-highlight-2);
+  margin-left: 16px;
+  padding-left: 4px;
 }
 
 
@@ -228,8 +254,15 @@ body {
   color: #000;
 }
 
-.tree-node--option > .jstree-icon::before {
-  content: '◼️';
+
+.tree-node--option > .jstree-anchor::before {
+  content: '🍃';
+  margin-right: 4px;
+}
+
+.tree-node--option > .jstree-anchor {
+  border: none;
+  padding-left: 0px;
 }
 
 /* ======================================= */

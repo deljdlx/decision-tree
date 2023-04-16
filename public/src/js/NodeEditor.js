@@ -32,6 +32,9 @@ class NodeEditor {
   }
 
   setValue(json) {
+    this.editor.setValue("");
+    // this.editor.destroy()
+    // this.initialize();
     this.editor.setValue(js_beautify(json));
 
   }

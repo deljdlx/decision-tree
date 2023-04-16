@@ -1,7 +1,61 @@
 class EchartRenderer {
 
   chart = null;
+  container = null;
+  tree = null;
 
+  eventListeners = {
+
+  };
+
+  constructor(container, tree) {
+
+    this.tree = tree;
+
+    this.container = container;
+
+    if (this.chart) {
+      this.chart.clear();
+    } else {
+      this.chart = echarts.init(this.container);
+    }
+
+    this.chart.on('click', (params) => {
+
+      if(params.componentType === 'series') {
+        this.fireEvent('click', params.data.data);
+        console.log('%cEchartRenderer.js :: 158 =============================', 'color: #f00; font-size: 1rem');
+        console.log("CLICK");
+      }
+
+      /*
+      console.log(dataAxis[Math.max(params.dataIndex - zoomSize / 2, 0)]);
+      myChart.dispatchAction({
+        type: 'dataZoom',
+        startValue: dataAxis[Math.max(params.dataIndex - zoomSize / 2, 0)],
+        endValue:
+          dataAxis[Math.min(params.dataIndex + zoomSize / 2, data.length - 1)]
+      });
+      */
+    });
+
+  }
+
+  addEventListener(eventName, callback) {
+    if(typeof(this.eventListeners[eventName]) === 'undefined') {
+      this.eventListeners[eventName] = [];
+    }
+
+    this.eventListeners[eventName].push(callback);
+  }
+
+  fireEvent(eventName, data) {
+    if(typeof(this.eventListeners[eventName]) !== 'undefined') {
+      this.eventListeners[eventName].forEach(listener => {
+        listener(data);
+      });
+    }
+  }
 
   formatCaption(caption, number = 3) {
     const words = caption.split(' ');
@@ -18,12 +72,12 @@ class EchartRenderer {
 
   transformData(node) {
 
-
     const caption = this.formatCaption('📦' + node.caption);
-
 
     const result = {
       name: caption,
+      id: node.id,
+      data: node,
       children: [],
       label: {
         color: '#fff',
@@ -46,7 +100,9 @@ class EchartRenderer {
       }
 
       result.children.push({
-        name: this.formatCaption('◼️' + option.caption),
+        name: this.formatCaption('🍃' + option.caption),
+        id: option.id,
+        data: option,
         children: children,
         label: {
           color: '#000',
@@ -57,26 +113,22 @@ class EchartRenderer {
           borderRadius: 5,
         }
       });
-
     }
+
     return result;
   }
 
-  render(container, tree) {
+
+
+  render(data) {
     setTimeout(() => {
 
-      const data = tree.toJSON();
+      this.chart.clear();
+
+      // const data = this.tree.toJSON();
+
+
       const treeData = this.transformData(data);
-
-      // Créer un conteneur pour le graphique
-
-      if (this.chart) {
-        this.chart.clear();
-      } else {
-        this.chart = echarts.init(container);
-      }
-
-
 
       // Initialiser le graphique ECharts
 
@@ -128,6 +180,14 @@ class EchartRenderer {
 
       this.chart.setOption(option);
 
+      this.initDraggable();
+
+    }, 100);
+  }
+
+  initDraggable() {
+    setTimeout(() => {
+      const draggable = new Draggable('#graph canvas');
     }, 100);
   }
 

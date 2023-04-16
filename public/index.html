@@ -8,9 +8,18 @@
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.2.2/dist/echarts.min.js"></script>
     <title>Tree builder</title>
 
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.11/themes/default/style.min.css" />
     <link rel="stylesheet" href="./css/style.css" />
-      
+    <link rel="stylesheet" href="./css/left-panel.css" />
+
+
+    <link rel="stylesheet" href="./css/utils/TabPanel.css" />
+
+    <link rel="stylesheet" href="./css/utils/ResizibleDiv.css" />
+
 
 </head>
 
@@ -18,33 +27,52 @@
     <div id="toolbar"></div>
     <div id="workspace">
 
-        <div id="right-panel">
-            <div id="data-toolbar">
+        <div id="left-panel">
+            <div id="left-panel-toolbar">
                 <i class="panel-trigger" data-feather="circle" data-target="data-container"></i>
-                <i class="panel-trigger" data-feather="alert-octagon" data-target="editor-container"></i>
+                <i class="panel-trigger" data-feather="alert-octagon" data-target="editor-container-test"></i>
             </div>
-            <div id="right-panel-content">
-                <div id="data-container"  class="right-panel-panel active">
+            <div id="left-panel-content">
+                <div id="data-container"  class="left-panel-panel active">
                     <div id="jstree-container"></div>
                     <!-- <div id="node-data"></div> -->
                 </div>
 
-                <div id="editor-container"  class="right-panel-panel">
-                    <div id="node-data"></div>
+                <div id="editor-container-test"  class="left-panel-panel">
+                    <div id="node-data-test"></div>
                 </div>
             </div>
         </div>
 
         <!-- <div id='tree-container'></div> -->
 
-        <div id="graph-container">
-            <div id="graph"></div>
+        <div id="main-content-container">
+            <div class="tabs">
+                <div class="tab active">Graph</div>
+                <div class="tab active">Source</div>
+                <div class="tab active">Test</div>
+            </div>
+
+            <div class="tab-contents">
+                <div id="graph-container" class="tab-content">
+                    <div id="graph"></div>
+                </div>
+
+                <div id="editor-container"  class="tab-content">
+                    <div id="node-data"></div>
+                </div>
+
+
+                <div id="questionnaire-container"  class="tab-content">
+                    <img src="./images/teacher.webp" style="width: 100%" />
+                    <div id="questionnaire"></div>
+                </div>
+
+            </div>
         </div>
 
-
-        <div id="questionnaire-container">
-            <img src="./images/teacher.webp" style="width: 100%" />
-            <div id="questionnaire"></div>
+        <div id="right-panel">
+            <div id="node-details"></div>
         </div>
     </div>
 
@@ -78,111 +106,140 @@
 
 
 
+    <script src="./src/js/utils/Draggable.js"></script>
+    <script src="./src/js/utils/Popin.js"></script>
+    <script src="./src/js/utils/TabPanel.js"></script>
+    <script src="./src/js/utils/ResizibleDiv.js"></script>
+
+
+
     <script>
-        ace.config.setModuleUrl(
-            'ace/mode/json',
-            'https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/mode-json.js'
-        );
-        // Activation de la beautification de code
-        ace.require("ace/ext/beautify");
+const myResizableDiv1 = new ResizableDiv('#left-panel');
+// const myResizableDiv2 = new ResizableDiv('#main-content-container');
+
+const myTabPanel = new TabPanel('#main-content-container');
+
+
+// Create an instance of the Popin class
+let myPopin = new Popin(500, 300);
+
+// Add content to the popin
+myPopin.setContent('Popin content');
+
+// Display the popin on the page
+// myPopin.show();
+
+// Close the popin after 5 seconds
+setTimeout(() => {
+  // myPopin.close();
+}, 5000);
+
+
+
 
         document.querySelectorAll('.panel-trigger').forEach(trigger => {
             trigger.addEventListener('click', (event) => {
                 const button = event.currentTarget;
                 const targetName = button.dataset.target;
 
-                document.querySelectorAll('.right-panel-panel').forEach((panel) => {
+                document.querySelectorAll('.left-panel-panel').forEach((panel) => {
                     panel.classList.remove('active');
                 });
-                
-                document.getElementById(targetName).classList.add('active');
 
-                
+                document.getElementById(targetName).classList.add('active');
             });
         });
 
 
+        // ===========================
+
+        const echartContainer = document.getElementById('graph');
+        ace.config.setModuleUrl(
+            'ace/mode/json',
+            'https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/mode-json.js'
+        );
+        // Activation de la beautification de code
+        ace.require("ace/ext/beautify");
+        // ===========================
+
+        const tree = new TreeNode();
+
+        const treeUpdate = (data) => {
+            echartRenderer.render(data);
+            nodeEditor.setValue(
+                JSON.stringify(data)
+            );
+        };
+
+        tree.addEventListener('loaded', (data) => {
+            treeUpdate(data);
+        });
+
+
+        // ===========================
+        const nodeEditor = new NodeEditor("node-data");
+
+        // ===========================
+
+        const echartRenderer = new EchartRenderer(echartContainer, tree);
+
+        echartRenderer.addEventListener('click', data => {
+            // console.log('%cindex.html :: 169 =============================', 'color: #f00; font-size: 1rem');
+            // console.log(data);
+        });
+
+        // ===========================
+
+        const jsTreeRenderer = new JSTreeRenderer(tree);
+        jsTreeRenderer.render([], '#jstree-container');
+        jsTreeRenderer.addEventListener('select', data => {
+            // console.log('%cindex.html :: 177 =============================', 'color: #f00; font-size: 1rem');
+            // console.log(data);
+        });
+
+
+
+        jsTreeRenderer.addEventListener('move', data => {
+            tree.loadData(data);
+            treeUpdate(data);
+        });
+        jsTreeRenderer.addEventListener('delete', data => {
+            tree.loadData(data);
+            treeUpdate(data);
+        });
+        jsTreeRenderer.addEventListener('rename', data => {
+            tree.loadData(data);
+            treeUpdate(data);
+        });
+
+        jsTreeRenderer.addEventListener('create', data => {
+            tree.loadData(data);
+            treeUpdate(data);
+        });
+
+        jsTreeRenderer.addEventListener('paste', data => {
+            tree.loadData(data);
+            treeUpdate(data);
+        });
+
+
+
         fetch('./data/developer.json').then((response) => response.json())
             .then(data => {
-                const tree = TreeNode.fromJSON(data);
+                tree.loadData(data);
 
-                const container = document.getElementById('graph');
-                const echartRenderer = new EchartRenderer();
-
-                const jsTreeRenderer = new JSTreeRenderer(tree);
-                jsTreeRenderer.render([], '#jstree-container');
-
-
-
-                const nodeEditor = new NodeEditor("node-data");
-
-                const json = JSON.stringify(tree.toJSON());
+                const treeData = tree.toJSON()
+                const json = JSON.stringify(treeData);
                 nodeEditor.setValue(json);
 
-                tree.setChangeCallback(() => {
-                    const json = JSON.stringify(tree.toJSON());
-                    const data = tree.toJSON();
-
-                    echartRenderer.render(container, tree);
-                    // jsTreeRenderer.loadData(data);
-
-                    nodeEditor.setValue(js_beautify(json));
-
-                });
-
-                echartRenderer.render(container, tree);
-                jsTreeRenderer.loadData(data);
 
 
-                const questionnaire = new Questionnaire(tree.toJSON(), document.querySelector('#questionnaire'));
+                echartRenderer.render(treeData);
+                jsTreeRenderer.loadData(treeData);
+
+
+                const questionnaire = new Questionnaire(treeData, document.querySelector('#questionnaire'));
                 questionnaire.render();
-
-
-
-                setTimeout(() => {
-
-                    const draggable = document.querySelector('#graph canvas');
-                    draggable.classList.add('draggable')
-
-                    // On ajoute un événement "mousedown" sur la div
-                    draggable.addEventListener('mousedown', (e) => {
-
-                        let offsetX = draggable.offsetLeft;
-                        let offsetY = draggable.offsetTop;
-
-
-                        // On stocke la position de départ
-                        startX = e.clientX - offsetX;
-                        startY = e.clientY - offsetY;
-
-                        // On ajoute un événement "mousemove" sur le document
-                        document.addEventListener('mousemove', onMouseMove);
-
-                        // On ajoute un événement "mouseup" sur le document
-                        document.addEventListener('mouseup', onMouseUp);
-                    });
-
-                    // Fonction appelée lors du mouvement de la souris
-                    function onMouseMove(e) {
-                        // On calcule la nouvelle position de la div
-                        const newPosX = e.clientX - startX;
-                        const newPosY = e.clientY - startY;
-
-                        // On définit la nouvelle position de la div
-                        draggable.style.left = newPosX + 'px';
-                        draggable.style.top = newPosY + 'px';
-                    }
-
-                    // Fonction appelée lors du relâchement du clic de la souris
-                    function onMouseUp() {
-                        // On supprime les événements "mousemove" et "mouseup" du document
-                        document.removeEventListener('mousemove', onMouseMove);
-                        document.removeEventListener('mouseup', onMouseUp);
-                    }
-                }, 500);
-
-
-
             });
 
 
