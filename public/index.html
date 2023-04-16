@@ -10,15 +10,29 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.11/themes/default/style.min.css" />
     <link rel="stylesheet" href="./css/style.css" />
-
+      
 
 </head>
 
 <body>
+    <div id="toolbar"></div>
     <div id="workspace">
-        <div id="data-container">
-            <div id="jstree-container"></div>
-            <div id="node-data"></div>
+
+        <div id="right-panel">
+            <div id="data-toolbar">
+                <i class="panel-trigger" data-feather="circle" data-target="data-container"></i>
+                <i class="panel-trigger" data-feather="alert-octagon" data-target="editor-container"></i>
+            </div>
+            <div id="right-panel-content">
+                <div id="data-container"  class="right-panel-panel active">
+                    <div id="jstree-container"></div>
+                    <!-- <div id="node-data"></div> -->
+                </div>
+
+                <div id="editor-container"  class="right-panel-panel">
+                    <div id="node-data"></div>
+                </div>
+            </div>
         </div>
 
         <!-- <div id='tree-container'></div> -->
@@ -33,6 +47,11 @@
             <div id="questionnaire"></div>
         </div>
     </div>
+
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>
+        feather.replace()
+    </script>
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -55,10 +74,34 @@
     <script src="./src/js/JSTreeRenderer.js"></script>
 
     <script src="./src/js/QuestionnaireRenderer.js"></script>
+    <script src="./src/js/NodeEditor.js"></script>
 
 
 
     <script>
+        ace.config.setModuleUrl(
+            'ace/mode/json',
+            'https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/mode-json.js'
+        );
+        // Activation de la beautification de code
+        ace.require("ace/ext/beautify");
+
+        document.querySelectorAll('.panel-trigger').forEach(trigger => {
+            trigger.addEventListener('click', (event) => {
+                const button = event.currentTarget;
+                const targetName = button.dataset.target;
+
+                document.querySelectorAll('.right-panel-panel').forEach((panel) => {
+                    panel.classList.remove('active');
+                });
+                
+                document.getElementById(targetName).classList.add('active');
+
+                
+            });
+        });
+
+
         fetch('./data/developer.json').then((response) => response.json())
             .then(data => {
                 const tree = TreeNode.fromJSON(data);
@@ -69,48 +112,21 @@
                 const jsTreeRenderer = new JSTreeRenderer(tree);
                 jsTreeRenderer.render([], '#jstree-container');
 
-                ace.config.setModuleUrl('ace/mode/json',
-                    'https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/mode-json.js');
-
-                // Activation de la beautification de code
-                ace.require("ace/ext/beautify");
-
-                // Initialiser l'éditeur
-                var editor = ace.edit("node-data");
-                editor.setTheme("ace/theme/monokai");
-                editor.commands.addCommand({
-                    name: "beautify",
-                    bindKey: {
-                        win: "Ctrl-Shift-B",
-                        mac: "Command-Shift-B"
-                    },
-                    exec: function (editor) {
-                        var session = editor.getSession();
-                        session.setValue(js_beautify(session.getValue()));
-                    },
-                    readOnly: true
-                });
 
 
-                editor.getSession().setMode("ace/mode/json");
+                const nodeEditor = new NodeEditor("node-data");
+
                 const json = JSON.stringify(tree.toJSON());
-                editor.setValue(js_beautify(json));
-
-
+                nodeEditor.setValue(json);
 
                 tree.setChangeCallback(() => {
                     const json = JSON.stringify(tree.toJSON());
                     const data = tree.toJSON();
 
-                    console.log('%cindex.html :: 42 =============================',
-                        'color: #f00; font-size: 1rem');
-                    console.log(data);
-                    console.log(json);
-
                     echartRenderer.render(container, tree);
                     // jsTreeRenderer.loadData(data);
 
-                    editor.setValue(js_beautify(json));
+                    nodeEditor.setValue(js_beautify(json));
 
                 });
 

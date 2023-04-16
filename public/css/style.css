@@ -75,36 +75,83 @@ body {
 
 /*==================================*/
 
+#toolbar {
+  background-color: #333333;
+  height: 2rem;
+}
 
 #workspace {
   display: flex;
   flex-direction: row;
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - 2rem);
 }
 
 
-#tree-container {
-  width: 600px;
+
+#right-panel {
+  /* width: 800px; */
+  display: flex;
+  flex-direction: row;
+  /* border: solid 10px #f00; */
+}
+
+#right-panel-content {
+  /* border: solid 10px #ff0; */
+  position: relative;
+  width:500px;
+}
+
+.right-panel-panel {
+  visibility: hidden;
+  top: 0;
+  left: 0;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
+
+.right-panel-panel.active {
+  visibility: visible;
 }
 
 
 #data-container {
-  width: 500px;
-  outline: solid 1px #aaa;
   display: flex;
   flex-direction: column;
 }
 
+#editor-container {
+
+  display: flex;
+  flex-direction: column;
+  background-color: #ff0; 
+  z-index: 200;
+}
+
+#data-toolbar {
+  background-color: #333333;
+  width: 2rem;
+  color: #aaa;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#data-toolbar > * {
+  margin: 0.25rem 0;
+}
+
+
 #jstree-container {
   flex-grow: 1;
   overflow-y: auto;
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
 }
 
 #node-data {
   outline: solid 1px #aaa;
-  height: 400px;
+  height: 100%;
 }
 
 #graph-container {
