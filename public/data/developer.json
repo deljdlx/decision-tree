@@ -1,6 +1,9 @@
 {
     "id": "a33ff3e2-0e6b-4974-bc76-86ef667490a8",
     "caption": "Quel est ton niveau en développement ?!",
+    "data": {
+        "description": "hello world"
+    },
     "options": {
         "7b977bd5-a3f2-42be-8139-33a15b982680": {
             "type": "option",

@@ -2,11 +2,12 @@ class TreeNode {
 
   // option is the attribute which store the "parent option"
   option = null;
-
   options = {};
   caption = '';
   id = null;
   data = {};
+
+  nodesById = {};
 
   renderer = null;
 
@@ -17,8 +18,25 @@ class TreeNode {
     this.option = option;
   }
 
+  getType() {
+    return 'node';
+  }
 
+  isRoot() {
+    if(this.option) {
+      return false;
+    }
 
+    return true;
+  }
+
+  getRoot() {
+    if(this.option) {
+      return this.option.getRoot();
+    }
+
+    return this;
+  }
 
   addEventListener(eventName, callback) {
     if(typeof(this.eventListeners[eventName]) === 'undefined') {
@@ -36,7 +54,15 @@ class TreeNode {
     }
   }
 
+  getNodeById(nodeId) {
+    console.log('%cTreeNode.js :: 54 =============================', 'color: #0f0; font-size: 1rem');
+    console.log(nodeId);
+    return this.nodesById[nodeId];
+  }
 
+  getId() {
+    return this.id;
+  }
 
   setId(id) {
     this.id = id;
@@ -44,7 +70,7 @@ class TreeNode {
   }
 
   getData() {
-    return this.data;
+    return this.data ?? {};
   }
 
   setData(data) {
@@ -81,17 +107,31 @@ class TreeNode {
     return this.options[name];
   }
 
-  createOption(caption) {
+  createOption(caption, id = null) {
     const option = new TreeOption(this, caption);
+    if(id) {
+      option.setId(id);
+    }
     this.addOption(option);
 
     return option;
   }
 
   addOption(option) {
-    this.options[option.id] = option;
+    this.options[option.getId()] = option;
+    this.nodesById[option.getId()] = option;
+
+
+    this.getRoot().nodesById[option.getId()] = option;
+
     return option;
   }
+
+  removeOption(option) {
+    delete this.options[option.getId()];
+    return this;
+  }
+
 
   removeOption(optionToDelete) {
     for (const key in this.options) {
@@ -99,8 +139,6 @@ class TreeNode {
 
       if (option === optionToDelete) {
         delete this.options[key];
-        this.getRenderer().refresh();
-
         return;
       }
     }
@@ -144,6 +182,8 @@ class TreeNode {
     this.caption = descriptor.caption;
     this.id = descriptor.id;
     this.data = descriptor.data;
+
+    this.nodesById[this.id] = this;
 
     Object.values(this.options).forEach((option, index) => {
       delete this.options[index];

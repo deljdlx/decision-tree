@@ -23,9 +23,8 @@ class EchartRenderer {
     this.chart.on('click', (params) => {
 
       if(params.componentType === 'series') {
-        this.fireEvent('click', params.data.data);
-        console.log('%cEchartRenderer.js :: 158 =============================', 'color: #f00; font-size: 1rem');
-        console.log("CLICK");
+        const clikedNode = this.tree.getNodeById(params.data.id);
+        this.fireEvent('click', clikedNode);
       }
 
       /*
@@ -72,12 +71,13 @@ class EchartRenderer {
 
   transformData(node) {
 
+
     const caption = this.formatCaption('📦' + node.caption);
 
     const result = {
       name: caption,
       id: node.id,
-      data: node,
+      data: node.data,
       children: [],
       label: {
         color: '#fff',
@@ -91,8 +91,8 @@ class EchartRenderer {
 
     for (const key in node.options) {
       const option = node.options[key];
-      const child = option.child;
 
+      const child = option.getChildNode();
 
       const children = [];
       if (child !== null) {
@@ -102,7 +102,7 @@ class EchartRenderer {
       result.children.push({
         name: this.formatCaption('🍃' + option.caption),
         id: option.id,
-        data: option,
+        data: option.data,
         children: children,
         label: {
           color: '#000',
@@ -119,20 +119,18 @@ class EchartRenderer {
   }
 
 
+  refresh() {
+    this.render();
+  }
 
-  render(data) {
+
+  render() {
     setTimeout(() => {
 
       this.chart.clear();
 
-      // const data = this.tree.toJSON();
+      const treeData = this.transformData(this.tree);
 
-
-      const treeData = this.transformData(data);
-
-      // Initialiser le graphique ECharts
-
-      // Configurer les options du graphique
       const option = {
         series: [{
           type: 'tree',

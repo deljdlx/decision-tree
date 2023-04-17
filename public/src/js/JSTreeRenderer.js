@@ -1,7 +1,7 @@
 class JSTreeRenderer {
   // Créer une fonction pour convertir les données en un format compréhensible par jsTree
 
-  tree = null;
+  jsTree = null;
   treeNode = null;
 
   eventListeners = {};
@@ -66,36 +66,27 @@ class JSTreeRenderer {
     })
     ;
 
-    this.tree = $(selector).jstree(true);
-  }
-
-  onSelect(event, data) {
-    this.fireEvent('select', data.node.data)
-  }
-
-  onMove(event, data) {
-    this.fireEvent('move', this.exportToTreeNode());
-  }
-
-  onDelete(event, data) {
-    this.fireEvent('delete', this.exportToTreeNode());
-  }
-
-  onRename(event, data) {
-    this.fireEvent('rename', this.exportToTreeNode());
-  }
-
-  onPaste(event, data) {
-    this.fireEvent('paste', this.exportToTreeNode());
+    this.jsTree = $(selector).jstree(true);
   }
 
 
-  onCreate(event, data) {
-    const node = data.node;
+  onRename(event, eventData) {
+    const node = this.treeNode.getNodeById(eventData.node.id);
+    node.caption = eventData.text;
+    this.fireEvent('rename', node);
+  }
+
+  onDelete(event, eventData) {
+    const node = this.treeNode.getNodeById(eventData.node.id);
+    node.remove();
+    this.fireEvent('delete', node);
+  }
+
+  onCreate(event, eventData) {
+    const node = eventData.node;
     node.icon = false;
-    // node.id = JSTreeRenderer.generateUUID();
+    const parentNode = this.jsTree.get_node(eventData.parent);
 
-    const parentNode = this.tree.get_node(data.parent);
     if(parentNode.type === 'node') {
       node.li_attr =  {
         class: 'tree-node--option'
@@ -110,13 +101,90 @@ class JSTreeRenderer {
       };
     }
 
-    this.tree.edit(node);
+    const newNodeId = JSTreeRenderer.generateUUID();
+    eventData.instance.set_id(eventData.node, newNodeId);
 
-    this.fireEvent('create', this.exportToTreeNode());
+
+    const treeNode = this.treeNode.getNodeById(parentNode.id);
+
+    let newNode = null;
+    if(treeNode.getType() === 'node') {
+      eventData.instance.set_text(eventData.node, 'New option');
+      newNode = treeNode.createOption('New option', newNodeId);
+    }
+    else {
+      eventData.instance.set_text(eventData.node, 'New question');
+      newNode = new TreeNode('New question');
+      newNode.setId(newNodeId);
+      treeNode.setChild(newNode);
+    }
+
+    this.jsTree.edit(node);
+
+    this.fireEvent('create', newNode);
+  }
+
+
+  onMove(event, eventData) {
+    const node = this.treeNode.getNodeById(eventData.node.id);
+    const previousParent = this.treeNode.getNodeById(eventData.old_parent);
+    const newParent =  this.treeNode.getNodeById(eventData.parent);
+
+    if(node.getType() === 'option') {
+      newParent.addOption(node);
+      node.node  = newParent;
+      previousParent.removeOption(node);
+    }
+    else {
+      previousParent.setChild(null);
+      newParent.setChild(node);
+
+    }
+
+    this.fireEvent('move', node);
+  }
+
+
+  onSelect(event, eventData) {
+    const node = this.treeNode.getNodeById(eventData.node.id);
+    this.fireEvent('select', node);
   }
 
 
 
+
+  onPaste(event, eventData) {
+    this.fireEvent('paste', this.exportToTreeNode());
+    const newNodeId = JSTreeRenderer.generateUUID();
+    eventData.instance.set_id(eventData.node, newNodeId);
+
+  }
+
+
+
+
+
+
+
+  getNodeById(nodeId) {
+    const node = this.jsTree.get_node(nodeId);
+    if(node.type === 'option') {
+      return this.toTreeOption(node);
+    }
+
+    return this.toTreeNode(node);
+  }
+
+  selectNodeById(nodeId, clear = true) {
+    if(clear) {
+      this.jsTree.deselect_all();
+    }
+
+    this.jsTree.select_node(nodeId);
+
+    return this.jsTree.get_node(nodeId);
+
+  }
 
   generateJSTreeData(treeNode, depth = 0) {
     const jstreeData = {
@@ -124,8 +192,7 @@ class JSTreeRenderer {
       text: treeNode.caption,
       icon: false,
       type: 'node',
-      data: treeNode.data,
-
+      data: treeNode.data ?? {},
       children: [],
       state: {
         opened: true
@@ -146,7 +213,7 @@ class JSTreeRenderer {
         text: option.caption,
         icon: false,
         type: 'option',
-        data: option.data,
+        data: option.data ?? {},
         children: child !== null ? [child] : [],
         state: {
           opened: true
@@ -163,18 +230,23 @@ class JSTreeRenderer {
   }
 
 
+  refresh() {
+    console.log('%cJSTreeRenderer.js :: 191 =============================', 'color: #f00; font-size: 1rem');
+    console.log(this.treeNode);
+    this.loadData(this.treeNode.toJSON());
+  }
+
+
   loadData(data) {
-    this.tree.settings.core.data = [this.generateJSTreeData(data)];
-    this.tree.refresh();
+    this.jsTree.settings.core.data = [this.generateJSTreeData(data)];
+    this.jsTree.refresh();
   }
 
 
   exportData() {
-    const data = this.tree.get_json()
+    const data = this.jsTree.get_json()
     return data;
   }
-
-
 
   exportToTreeNode() {
     const jsTreeData = this.exportData();
@@ -203,13 +275,15 @@ class JSTreeRenderer {
       id: optionData.id,
       caption: optionData.text,
       type: 'option',
-      value: optionData.data.value,
+      data: optionData.data,
       child: null,
       data: optionData.data
     };
 
-    if(optionData.children.length) {
-      option.child = this.toTreeNode(optionData.children[0])
+    if(optionData.children?.length) {
+      const nodeId = optionData.children[0];
+      const nodeData = this.jsTree.get_node(nodeId);
+      option.child = this.toTreeNode(nodeData);
     }
 
     return option;
@@ -224,9 +298,9 @@ class JSTreeRenderer {
       data: descriptor.data,
     };
 
-
-    if(descriptor.children.length) {
-      descriptor.children.forEach((optionData, index) => {
+    if(descriptor.children?.length) {
+      descriptor.children.forEach((optionId) => {
+        const optionData = this.jsTree.get_node(optionId);
         node.options.push(
           this.toTreeOption(optionData)
         );

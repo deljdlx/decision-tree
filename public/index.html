@@ -59,7 +59,7 @@
                 </div>
 
                 <div id="editor-container"  class="tab-content">
-                    <div id="node-data"></div>
+                    <div id="source-editor"></div>
                 </div>
 
 
@@ -72,7 +72,12 @@
         </div>
 
         <div id="right-panel">
-            <div id="node-details"></div>
+            <div id="node-editor-container">
+                <div id="node-editor"></div>
+                <div>
+                    <button id="node-editor-update">Update</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -164,11 +169,16 @@ setTimeout(() => {
 
         const tree = new TreeNode();
 
-        const treeUpdate = (data) => {
-            echartRenderer.render(data);
-            nodeEditor.setValue(
+        const treeUpdate = () => {
+
+
+            echartRenderer.refresh();
+
+            /*
+            sourceEditor.setValue(
                 JSON.stringify(data)
             );
+            */
         };
 
         tree.addEventListener('loaded', (data) => {
@@ -177,45 +187,59 @@ setTimeout(() => {
 
 
         // ===========================
-        const nodeEditor = new NodeEditor("node-data");
+        const sourceEditor = new NodeEditor("source-editor");
+        sourceEditor.setNode(tree);
 
         // ===========================
+        const nodeEditor = new NodeEditor("node-editor");
+        document.querySelector('#node-editor-update').addEventListener('click', event => {
 
-        const echartRenderer = new EchartRenderer(echartContainer, tree);
+            console.log('%cindex.html :: 191 =============================', 'color: #f00; font-size: 1rem');
+            console.log(nodeEditor.getValue());
+            console.log(nodeEditor.getNode())
 
-        echartRenderer.addEventListener('click', data => {
-            // console.log('%cindex.html :: 169 =============================', 'color: #f00; font-size: 1rem');
-            // console.log(data);
+            // jsTreeRenderer.updateNodeData();
         });
 
+
+        // ===========================
+        const echartRenderer = new EchartRenderer(echartContainer, tree);
+        echartRenderer.addEventListener('click', data => {
+            const nodeId = data.id;
+            jsTreeRenderer.selectNodeById(nodeId);
+
+
+        });
         // ===========================
 
         const jsTreeRenderer = new JSTreeRenderer(tree);
         jsTreeRenderer.render([], '#jstree-container');
-        jsTreeRenderer.addEventListener('select', data => {
-            // console.log('%cindex.html :: 177 =============================', 'color: #f00; font-size: 1rem');
-            // console.log(data);
+
+        // JDLX_TODO
+        jsTreeRenderer.addEventListener('select', node => {
+            nodeEditor.setNode(node);
+            nodeEditor.refresh();
+            // nodeEditor.setValue(JSON.stringify(data));
         });
 
 
-
-        jsTreeRenderer.addEventListener('move', data => {
-            tree.loadData(data);
-            treeUpdate(data);
-        });
-        jsTreeRenderer.addEventListener('delete', data => {
-            tree.loadData(data);
-            treeUpdate(data);
-        });
         jsTreeRenderer.addEventListener('rename', data => {
-            tree.loadData(data);
-            treeUpdate(data);
+            treeUpdate();
         });
 
         jsTreeRenderer.addEventListener('create', data => {
-            tree.loadData(data);
-            treeUpdate(data);
+            treeUpdate();
         });
+
+        jsTreeRenderer.addEventListener('delete', data => {
+            treeUpdate();
+        });
+        jsTreeRenderer.addEventListener('move', data => {
+            treeUpdate();
+        });
+
+
+
 
         jsTreeRenderer.addEventListener('paste', data => {
             tree.loadData(data);
@@ -229,14 +253,10 @@ setTimeout(() => {
                 tree.loadData(data);
 
                 const treeData = tree.toJSON()
-                const json = JSON.stringify(treeData);
-                nodeEditor.setValue(json);
 
-
-
-                echartRenderer.render(treeData);
-                jsTreeRenderer.loadData(treeData);
-
+                sourceEditor.refresh();
+                jsTreeRenderer.refresh();
+                echartRenderer.render();
 
                 const questionnaire = new Questionnaire(treeData, document.querySelector('#questionnaire'));
                 questionnaire.render();

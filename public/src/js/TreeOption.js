@@ -22,9 +22,21 @@ class TreeOption {
     this.changeCallback = changeCallback;
   }
 
+  getType() {
+    return 'option';
+  }
+
+  getRoot() {
+    return this.node.getRoot();
+  }
+
   setId(id) {
     this.id = id;
     return this;
+  }
+
+  getId() {
+    return this.id;
   }
 
   static generateUUID() {
@@ -76,6 +88,7 @@ class TreeOption {
 
     if (node) {
       this.child.setOption(this);
+      this.getRoot().nodesById[node.getId()] = node;
     }
 
     return node;
@@ -86,8 +99,8 @@ class TreeOption {
   }
 
 
-  getChild() {
-    return this.child;
+  getChildNode() {
+    return this.child ?? null;
   }
 
   toJSON() {

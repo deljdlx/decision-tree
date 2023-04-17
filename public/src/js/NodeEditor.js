@@ -2,15 +2,47 @@ class NodeEditor {
 
   editor;
   selector;
+  treeNode;
+
+  eventListeners = {};
 
   constructor(selector) {
     this.selector = selector;
     this.initialize();
   }
 
+  addEventListener(eventName, callback) {
+    if(typeof(this.eventListeners[eventName]) === 'undefined') {
+      this.eventListeners[eventName] = [];
+    }
+
+    this.eventListeners[eventName].push(callback);
+  }
+
+  fireEvent(eventName, data) {
+    if(typeof(this.eventListeners[eventName]) !== 'undefined') {
+      this.eventListeners[eventName].forEach(listener => {
+        listener(data);
+      });
+    }
+  }
+
+  getNode() {
+    return this.node;
+  }
+
+  setNode(treeNode) {
+    this.treeNode = treeNode;
+    this.refresh();
+  }
+
+  refresh() {
+    this.setValue(JSON.stringify(this.treeNode.toJSON()));
+  }
+
+
+
   initialize() {
-
-
     // Initialiser l'éditeur
     this.editor = ace.edit(this.selector);
     this.editor.setTheme("ace/theme/monokai");
@@ -28,7 +60,10 @@ class NodeEditor {
     });
 
     this.editor.getSession().setMode("ace/mode/json");
+  }
 
+  getValue() {
+    return this.editor.getValue();
   }
 
   setValue(json) {
