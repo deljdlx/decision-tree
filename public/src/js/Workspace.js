@@ -3,6 +3,7 @@ class Workspace
   jsTree = null;
   tree = null;
   echart = null;
+  wysiwygEditor = null;
 
   sourceEditor = null;
   nodeEditor = null;
@@ -12,6 +13,7 @@ class Workspace
     treeJs: '#jstree-container',
     sourceEditor: "source-editor",
     questionnaire: '#questionnaire',
+    wysiwygEditor: '#wysiwyg',
   };
 
   constructor() {
@@ -26,6 +28,11 @@ class Workspace
     this.initializeNodeEditor();
 
     this.initializeQuestionnaire();
+    this.initializeWysiwygEditor();
+  }
+
+  initializeWysiwygEditor() {
+    this.wysiwygEditor = new WysiwygEditor(this.tree, this.selectors.wysiwygEditor);
   }
 
   initializeQuestionnaire() {
@@ -64,10 +71,12 @@ class Workspace
     this.jsTree = new JSTreeRenderer(this.tree, this.selectors.treeJs);
 
     this.jsTree.addEventListener('select', node => {
-        console.log('%cWorkspace.js :: 67 =============================', 'color: #f00; font-size: 1rem');
-        console.log(node);
-        this.nodeEditor.setNode(node);
-        this.nodeEditor.refresh();
+      this.nodeEditor.setNode(node);
+      this.nodeEditor.refresh();
+
+      this.wysiwygEditor.setNode(node);
+      this.wysiwygEditor.refresh();
+
     });
 
     this.jsTree.addEventListener('rename', data => {
@@ -109,8 +118,12 @@ class Workspace
     this.tree = new TreeNode();
 
     this.tree.addEventListener('loaded', (data) => {
-        this.updateTree(data);
+        this.updateTree();
     });
+
+    this.tree.addEventListener('updated', (data) => {
+      this.updateTree();
+  });
   }
 
   updateTree() {

@@ -1,9 +1,20 @@
 class TreeNodeData
 {
-  data = {};
+  data = {
+    content: "",
+    extendedCaption: "",
+  };
 
   constuctor(data = {}) {
     this.data = data;
+  }
+
+  get(key, defaultValue = null) {
+    if(typeof(this.data[key]) === 'undefined') {
+      return defaultValue;
+    }
+
+    return this.data[key];
   }
 
   set(key, value) {

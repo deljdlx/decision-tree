@@ -121,6 +121,10 @@ class TreeNode extends TreeAbstractNode{
     this.fireEvent('loaded', this.toJSON());
   }
 
+  fireUpdateEvent() {
+    this.fireEvent('updated', this);
+  }
+
   toJSON() {
     const options = {};
     for (const key in this.options) {
@@ -131,7 +135,7 @@ class TreeNode extends TreeAbstractNode{
     return {
       id: this.getId(),
       caption: this.getCaption(),
-      options: this.getOptions(),
+      options: options,
       type: 'node',
       data: this.getData().toJSON(),
     };
