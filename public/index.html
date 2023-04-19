@@ -64,7 +64,7 @@
 
 
                 <div id="questionnaire-container"  class="tab-content">
-                    <img src="./images/teacher.webp" style="width: 100%" />
+                    <img src="./images/mention.png" style="width: 100%" />
                     <div id="questionnaire"></div>
                 </div>
 
@@ -86,6 +86,8 @@
         feather.replace()
     </script>
 
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.11/jstree.min.js"></script>
@@ -96,18 +98,22 @@
 
 
 
-    <script src="./src/js/TreeOption.js"></script>
-    <script src="./src/js/TreeNode.js"></script>
-    <script src="./src/js/TreeOptionUI.js"></script>
-    <script src="./src/js/TreeNodeUI.js"></script>
+    <script src="./src/js/Tree/TreeAbstractNode.js"></script>
+    <script src="./src/js/Tree/TreeOption.js"></script>
+    <script src="./src/js/Tree/TreeNode.js"></script>
+    <script src="./src/js/Tree/TreeNodeData.js"></script>
+
     <script src="./src/js/AddNodeForm.js"></script>
     <script src="./src/js/AddOptionForm.js"></script>
 
     <script src="./src/js/EchartRenderer.js"></script>
     <script src="./src/js/JSTreeRenderer.js"></script>
 
-    <script src="./src/js/QuestionnaireRenderer.js"></script>
     <script src="./src/js/NodeEditor.js"></script>
+
+
+    <script src="./src/js/Questionnaire/QuestionnaireRenderer.js"></script>
+    <script src="./src/js/Questionnaire/QuestionnaireSession.js"></script>
 
 
 
@@ -115,6 +121,9 @@
     <script src="./src/js/utils/Popin.js"></script>
     <script src="./src/js/utils/TabPanel.js"></script>
     <script src="./src/js/utils/ResizibleDiv.js"></script>
+
+
+    <script src="./src/js/Workspace.js"></script>
 
 
 
@@ -139,9 +148,6 @@ setTimeout(() => {
   // myPopin.close();
 }, 5000);
 
-
-
-
         document.querySelectorAll('.panel-trigger').forEach(trigger => {
             trigger.addEventListener('click', (event) => {
                 const button = event.currentTarget;
@@ -157,114 +163,13 @@ setTimeout(() => {
 
 
         // ===========================
-
-        const echartContainer = document.getElementById('graph');
-        ace.config.setModuleUrl(
-            'ace/mode/json',
-            'https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/mode-json.js'
-        );
-        // Activation de la beautification de code
-        ace.require("ace/ext/beautify");
         // ===========================
 
-        const tree = new TreeNode();
-
-        const treeUpdate = () => {
-
-
-            echartRenderer.refresh();
-
-            /*
-            sourceEditor.setValue(
-                JSON.stringify(data)
-            );
-            */
-        };
-
-        tree.addEventListener('loaded', (data) => {
-            treeUpdate(data);
-        });
+        const workspace = new Workspace();
+        workspace.loadByURL('./data/developer.json');
 
 
-        // ===========================
-        const sourceEditor = new NodeEditor("source-editor");
-        sourceEditor.setNode(tree);
-
-        // ===========================
-        const nodeEditor = new NodeEditor("node-editor");
-        document.querySelector('#node-editor-update').addEventListener('click', event => {
-
-            console.log('%cindex.html :: 191 =============================', 'color: #f00; font-size: 1rem');
-            console.log(nodeEditor.getValue());
-            console.log(nodeEditor.getNode())
-
-            // jsTreeRenderer.updateNodeData();
-        });
-
-
-        // ===========================
-        const echartRenderer = new EchartRenderer(echartContainer, tree);
-        echartRenderer.addEventListener('click', data => {
-            const nodeId = data.id;
-            jsTreeRenderer.selectNodeById(nodeId);
-
-
-        });
-        // ===========================
-
-        const jsTreeRenderer = new JSTreeRenderer(tree);
-        jsTreeRenderer.render([], '#jstree-container');
-
-        // JDLX_TODO
-        jsTreeRenderer.addEventListener('select', node => {
-            nodeEditor.setNode(node);
-            nodeEditor.refresh();
-            // nodeEditor.setValue(JSON.stringify(data));
-        });
-
-
-        jsTreeRenderer.addEventListener('rename', data => {
-            treeUpdate();
-        });
-
-        jsTreeRenderer.addEventListener('create', data => {
-            treeUpdate();
-        });
-
-        jsTreeRenderer.addEventListener('delete', data => {
-            treeUpdate();
-        });
-        jsTreeRenderer.addEventListener('move', data => {
-            treeUpdate();
-        });
-
-
-
-
-        jsTreeRenderer.addEventListener('paste', data => {
-            tree.loadData(data);
-            treeUpdate(data);
-        });
-
-
-
-        fetch('./data/developer.json').then((response) => response.json())
-            .then(data => {
-                tree.loadData(data);
-
-                const treeData = tree.toJSON()
-
-                sourceEditor.refresh();
-                jsTreeRenderer.refresh();
-                echartRenderer.render();
-
-                const questionnaire = new Questionnaire(treeData, document.querySelector('#questionnaire'));
-                questionnaire.render();
-            });
-
-
-
-
+        // const tree = new TreeNode();
         // const ui = new TreeNodeUI(tree);
         // document.querySelector('#tree-container').append(ui.render());
 

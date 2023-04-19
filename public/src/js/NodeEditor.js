@@ -4,6 +4,8 @@ class NodeEditor {
   selector;
   treeNode;
 
+  aceEditorTheme = 'ace/theme/monokai';
+
   eventListeners = {};
 
   constructor(selector) {
@@ -45,7 +47,7 @@ class NodeEditor {
   initialize() {
     // Initialiser l'éditeur
     this.editor = ace.edit(this.selector);
-    this.editor.setTheme("ace/theme/monokai");
+    this.editor.setTheme(this.aceEditorTheme);
     this.editor.commands.addCommand({
       name: "beautify",
       bindKey: {

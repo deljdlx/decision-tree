@@ -4,10 +4,13 @@ class JSTreeRenderer {
   jsTree = null;
   treeNode = null;
 
+  container;
+
   eventListeners = {};
 
 
-  constructor(treeNode) {
+  constructor(treeNode, selector) {
+    this.container = document.querySelector(selector);
     this.treeNode = treeNode;
   }
 
@@ -28,11 +31,11 @@ class JSTreeRenderer {
   }
 
 
-  render(data, selector) {
-    $(selector).jstree({
+  render() {
+    $(this.container).jstree({
       plugins: ["dnd", "contextmenu", "state", "types", "wholerow", ],
       core: {
-        data: [this.generateJSTreeData(data)],
+        data: [this.generateJSTreeData(this.treeNode)],
         "check_callback": true,
         "animation" : 0,
       },
@@ -49,8 +52,6 @@ class JSTreeRenderer {
         }
       },
 
-
-
     }).on('rename_node.jstree', (e, data) => {
       this.onRename(event, data);
     }).on('create_node.jstree', (e, data) => {
@@ -66,7 +67,7 @@ class JSTreeRenderer {
     })
     ;
 
-    this.jsTree = $(selector).jstree(true);
+    this.jsTree = $(this.container).jstree(true);
   }
 
 
@@ -101,7 +102,7 @@ class JSTreeRenderer {
       };
     }
 
-    const newNodeId = JSTreeRenderer.generateUUID();
+    const newNodeId = TreeAbstractNode.generateUUID();
     eventData.instance.set_id(eventData.node, newNodeId);
 
 
@@ -126,6 +127,8 @@ class JSTreeRenderer {
 
 
   onMove(event, eventData) {
+
+    /*
     const node = this.treeNode.getNodeById(eventData.node.id);
     const previousParent = this.treeNode.getNodeById(eventData.old_parent);
     const newParent =  this.treeNode.getNodeById(eventData.parent);
@@ -138,10 +141,12 @@ class JSTreeRenderer {
     else {
       previousParent.setChild(null);
       newParent.setChild(node);
-
     }
+    */
 
-    this.fireEvent('move', node);
+    this.fireEvent('move', this.exportToTreeNode());
+    // console.log(JSON.stringify(this.exportToTreeNode()));
+    // this.fireEvent('move', node);
   }
 
 
@@ -150,21 +155,11 @@ class JSTreeRenderer {
     this.fireEvent('select', node);
   }
 
-
-
-
   onPaste(event, eventData) {
     this.fireEvent('paste', this.exportToTreeNode());
-    const newNodeId = JSTreeRenderer.generateUUID();
+    const newNodeId = TreeAbstractNode.generateUUID();
     eventData.instance.set_id(eventData.node, newNodeId);
-
   }
-
-
-
-
-
-
 
   getNodeById(nodeId) {
     const node = this.jsTree.get_node(nodeId);
@@ -186,10 +181,11 @@ class JSTreeRenderer {
 
   }
 
-  generateJSTreeData(treeNode, depth = 0) {
+  generateJSTreeData(treeNode) {
+
     const jstreeData = {
-      id: treeNode.id,
-      text: treeNode.caption,
+      id: treeNode.getId(),
+      text: treeNode.getCaption(),
       icon: false,
       type: 'node',
       data: treeNode.data ?? {},
@@ -198,15 +194,13 @@ class JSTreeRenderer {
         opened: true
       },
       li_attr: {
-        class: 'tree-node--' + treeNode.type
+        class: 'tree-node--' + treeNode.getType()
       },
     };
 
-
-    let nthChild = 0;
     for (const key in treeNode.options) {
       const option = treeNode.options[key];
-      const child = option.child !== null ? this.generateJSTreeData(option.child, depth + 1) : null;
+      const child = option.child !== null ? this.generateJSTreeData(option.child) : null;
 
       const jstreeOption = {
         id: option.id,
@@ -219,25 +213,28 @@ class JSTreeRenderer {
           opened: true
         },
         li_attr: {
-          class: 'tree-node--' + option.type
+          class: 'tree-node--' + option.getType()
         },
       };
       jstreeData.children.push(jstreeOption);
-
-      nthChild++;
     }
     return jstreeData;
   }
 
 
   refresh() {
-    console.log('%cJSTreeRenderer.js :: 191 =============================', 'color: #f00; font-size: 1rem');
-    console.log(this.treeNode);
-    this.loadData(this.treeNode.toJSON());
+    // console.log('%cJSTreeRenderer.js :: 191 =============================', 'color: #f00; font-size: 1rem');
+    // console.log(this.treeNode);
+    // this.loadData(this.treeNode.toJSON());
+    // this.render();
+    this.jsTree.settings.core.data = [this.generateJSTreeData(this.treeNode)];
+    this.jsTree.refresh();
   }
 
 
   loadData(data) {
+    console.log('%cJSTreeRenderer.js :: 232 =============================', 'color: #f00; font-size: 1rem');
+    console.log(this.generateJSTreeData(data));
     this.jsTree.settings.core.data = [this.generateJSTreeData(data)];
     this.jsTree.refresh();
   }
@@ -256,6 +253,8 @@ class JSTreeRenderer {
     const nodeOptions = {};
 
     children.forEach((optionData, index) => {
+      console.log('%cJSTreeRenderer.js :: 261 =============================', 'color: #f00; font-size: 1rem');
+      console.log(optionData);
       nodeOptions[optionData.id] = this.toTreeOption(optionData);
     });
 
@@ -309,17 +308,4 @@ class JSTreeRenderer {
 
     return node;
   }
-
-  static generateUUID() {
-    let d = new Date().getTime();
-    if (typeof performance !== 'undefined' && typeof performance.now === 'function'){
-      d += performance.now(); //ajoute la performance si disponible pour une plus grande unicité
-    }
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      const r = (d + Math.random() * 16) % 16 | 0;
-      d = Math.floor(d / 16);
-      return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
-    });
-  }
-
 }
