@@ -10,15 +10,25 @@ class Workspace
   questionnaire = null;
 
   selectors = {
+
+    leftPanel: '#left-panel',
+    rightPanel: '#right-panel',
+    mainPanel: '#main-panel',
+
     treeJs: '#jstree-container',
     sourceEditor: "source-editor",
     questionnaire: '#questionnaire',
     wysiwygEditor: '#wysiwyg',
   };
 
+  leftPanel;
+  mainPanel;
+  rightPanel;
+
   constructor() {
 
     this.initializeWorkspace();
+    this.initializeLayout();
 
     this.initializeTree();
     this.initializeEchart();
@@ -29,6 +39,12 @@ class Workspace
 
     this.initializeQuestionnaire();
     this.initializeWysiwygEditor();
+  }
+
+  initializeLayout() {
+    new ResizableDiv(this.selectors.leftPanel);
+    new ResizableDiv(this.selectors.rightPanel, "left");
+    new TabPanel(this.selectors.mainPanel);
   }
 
   initializeWysiwygEditor() {
@@ -112,6 +128,10 @@ class Workspace
         const nodeId = data.id;
         this.jsTree.selectNodeById(nodeId);
     });
+
+    this.echart.addEventListener('new-node', node => {
+      this.updateTree();
+    });
   }
 
   initializeTree() {
@@ -131,6 +151,7 @@ class Workspace
     this.sourceEditor.refresh();
     this.nodeEditor.refresh();
     this.questionnaire.refresh();
+    this.jsTree.refresh();
   }
 
   loadByURL(url) {

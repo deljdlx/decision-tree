@@ -11,6 +11,22 @@ class TreeAbstractNode {
     this.data = new TreeNodeData();
   }
 
+  isRoot() {
+    if(this.parent) {
+      return false;
+    }
+
+    return true;
+  }
+
+  getRoot() {
+    if(this.parent) {
+      return this.parent.getRoot();
+    }
+
+    return this;
+  }
+
   setParent(parent) {
     this.parent = parent;
     return parent;
@@ -61,6 +77,10 @@ class TreeAbstractNode {
         listener(data);
       });
     }
+  }
+
+  generateId() {
+    this.id = TreeAbstractNode.generateUUID();
   }
 
   static generateUUID() {

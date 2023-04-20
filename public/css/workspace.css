@@ -1,0 +1,27 @@
+#toolbar {
+  background-color: #333333;
+  height: 2rem;
+}
+
+#left-panel {
+  width: 300px;
+}
+
+#workspace {
+  display: flex;
+  flex-direction: row;
+  width: 100vw;
+  height: calc(100vh - 2rem);
+}
+
+#main-panel {
+  flex-grow: 1;
+  border: solid 1px #aaa;
+  overflow: hidden;
+  max-height: 100%;
+}
+
+
+#right-panel {
+  width: 400px;
+}

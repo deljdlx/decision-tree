@@ -8,33 +8,17 @@ class TreeNode extends TreeAbstractNode{
 
   eventListeners = {};
 
-  constructor(caption, option = null) {
+  constructor(caption, parent = null) {
 
     super(caption);
 
     this.caption = caption;
-    this.option = option;
+    this.setParent(parent);
     this.data = new TreeNodeData();
   }
 
   getType() {
     return 'node';
-  }
-
-  isRoot() {
-    if(this.parent) {
-      return false;
-    }
-
-    return true;
-  }
-
-  getRoot() {
-    if(this.parent) {
-      return this.parent.getRoot();
-    }
-
-    return this;
   }
 
   getNodeById(nodeId) {
@@ -60,9 +44,12 @@ class TreeNode extends TreeAbstractNode{
 
   createOption(caption, id = null) {
     const option = new TreeOption(this, caption);
-    if(id) {
-      option.setId(id);
+
+    if(id === null) {
+      id = TreeAbstractNode.generateUUID();
     }
+    option.setId(id);
+
     this.addOption(option);
 
     return option;
@@ -135,9 +122,9 @@ class TreeNode extends TreeAbstractNode{
     return {
       id: this.getId(),
       caption: this.getCaption(),
-      options: options,
       type: 'node',
       data: this.getData().toJSON(),
+      options: options,
     };
   }
 

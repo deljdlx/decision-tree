@@ -20,9 +20,6 @@ class TreeOption extends TreeAbstractNode {
     return 'option';
   }
 
-  getRoot() {
-    return this.parent.getRoot();
-  }
 
   remove() {
     this.parent.removeOption(this);
@@ -30,6 +27,12 @@ class TreeOption extends TreeAbstractNode {
     if (this.changeCallback) {
       this.changeCallback(this);
     }
+  }
+
+  createChild(caption) {
+    this.child = new TreeNode(caption, this);
+    this.child.generateId();
+    return this.child;
   }
 
   setChild(node) {

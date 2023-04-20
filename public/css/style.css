@@ -4,6 +4,9 @@
   --color-highlight-2: #9AA8E8;
 
   --scrollbar-width: 15px;
+
+  --bs-accordion-body-padding-y: 0;
+  --bs-accordion-body-padding-x: 0;
 }
 
 body {
@@ -43,29 +46,6 @@ body {
 
 /*==================================*/
 
-#toolbar {
-  background-color: #333333;
-  height: 2rem;
-}
-
-#workspace {
-  display: flex;
-  flex-direction: row;
-  width: 100vw;
-  height: calc(100vh - 2rem);
-}
-
-#main-content-container {
-  flex-grow: 1;
-  border: solid 1px #aaa;
-  overflow: hidden;
-  max-height: 100%;
-}
-
-
-#right-panel {
-  width: 600px;
-}
 
 /* ======================================= */
 

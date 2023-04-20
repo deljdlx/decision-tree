@@ -4,6 +4,12 @@ class EchartRenderer {
   container = null;
   tree = null;
 
+  currentNode = null;
+
+  newNodePopin;
+  newNodeForm;
+  newNodeNameInput;
+
   eventListeners = {
 
   };
@@ -11,14 +17,36 @@ class EchartRenderer {
   constructor(container, tree) {
 
     this.tree = tree;
-
     this.container = container;
+
+    this.initializeNewNodePopin();
+
 
     if (this.chart) {
       this.chart.clear();
     } else {
       this.chart = echarts.init(this.container);
     }
+
+    this.chart.on('contextmenu', (params) => {
+
+      const event = params.event.event;
+      event.preventDefault();
+
+      if(params.componentType === 'series') {
+        this.currentNode = this.tree.getNodeById(params.data.id);
+
+        if(this.currentNode.getType() === 'option') {
+          if(this.currentNode.getChildNode()) {
+            return false;
+          }
+        }
+
+        this.showNewNodePopin(event.clientX, event.clientY);
+      }
+      // params.event.preventDefault();
+      // return false;
+    });
 
     this.chart.on('click', (params) => {
 
@@ -37,7 +65,63 @@ class EchartRenderer {
       });
       */
     });
+  }
 
+  initializeNewNodePopin() {
+    this.newNodePopin = new Popin(
+      500,
+      300,
+    );
+    // newNodePopin.setContent('Popin content');
+    this.newNodeForm = document.createElement('form');
+    this.newNodeForm.innerHTML = `
+      <div>
+        <h2>Create new node</h2>
+        <label>New node name <input name="new-node-name"/>
+        <button>Créer</button>
+      </div>
+    `;
+
+    this.newNodeNameInput = this.newNodeForm.querySelector('input[name="new-node-name"]');
+
+    this.newNodeForm.addEventListener('submit', (event) => {
+      this.handleNewNode(event);
+    })
+
+    this.newNodePopin.getContentNode().append(this.newNodeForm);
+  }
+
+  showNewNodePopin(x = null, y = null) {
+    if(x !== null || y !== y) {
+      this.newNodePopin.setPosition(x, y);
+    }
+
+    this.newNodeNameInput.value = '';
+    this.newNodePopin.show();
+  }
+
+  handleNewNode(event) {
+    event.preventDefault();
+    const caption = this.newNodeNameInput.value;
+    this.newNodeNameInput.value = '';
+    this.newNodePopin.hide();
+
+    if(this.currentNode.getType() === 'option') {
+      const newNode = this.currentNode.createChild(caption);
+      this.fireEvent('new-node', {
+        parent: this.currentNode,
+        newNode: newNode,
+        newNodeType: 'node',
+      });
+    }
+    else {
+      const option = this.currentNode.createOption(caption);
+      this.fireEvent('new-node', {
+        parent: this.currentNode,
+        newNode: option,
+        newNodeType: 'option',
+      });
+    }
   }
 
   addEventListener(eventName, callback) {
@@ -172,7 +256,9 @@ class EchartRenderer {
             }
           },
 
-          animationDurationUpdate: 0
+          animationDurationUpdate: 0,
+
+
         }]
       };
 

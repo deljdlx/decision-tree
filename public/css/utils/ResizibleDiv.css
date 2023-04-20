@@ -1,15 +1,30 @@
 .resizer {
   position: absolute;
   top: 0;
-  right: -2px;
-  width: 2px;
+  width: 4px;
   height: 100%;
   background-color: #aaa;
   outline: solid 1px #000;
   cursor: ew-resize;
 }
 
-.resizable-container {
+
+.resizable-container.direction-right {
   position: relative;
-  margin-right: 2px;
+  margin-right: 4px;
+}
+
+.resizable-container.direction-left {
+  position: relative;
+  margin-left: 4px;
+}
+
+
+.resizable-container.direction-right .resizer {
+  right: -4px;
+}
+
+
+.resizable-container.direction-left .resizer {
+  left: -4px;
 }

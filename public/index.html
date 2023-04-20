@@ -9,20 +9,28 @@
     <title>Tree builder</title>
 
 
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.11/themes/default/style.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet" />
+
+
+    <link rel="stylesheet" href="./css/bootstrap-override.css" />
+
+    <link rel="stylesheet" href="./css/utils/TabPanel.css" />
+    <link rel="stylesheet" href="./css/utils/ResizibleDiv.css" />
+    <link rel="stylesheet" href="./css/utils/Popin.css" />
+
+    <link rel="stylesheet" href="./css/workspace.css" />
     <link rel="stylesheet" href="./css/style.css" />
     <link rel="stylesheet" href="./css/left-panel.css" />
 
 
-    <link rel="stylesheet" href="./css/utils/TabPanel.css" />
-
-    <link rel="stylesheet" href="./css/utils/ResizibleDiv.css" />
 
 
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet" />
+
 
 </head>
 
@@ -49,7 +57,7 @@
 
         <!-- <div id='tree-container'></div> -->
 
-        <div id="main-content-container">
+        <div id="main-panel">
             <div class="tabs">
                 <div class="tab active">Graph</div>
                 <div class="tab active">Source</div>
@@ -75,18 +83,73 @@
         </div>
 
         <div id="right-panel">
-            <div id="node-editor-container">
-                <div id="node-editor"></div>
-                <div>
-                    <button id="node-editor-update">Update</button>
+
+
+
+            <div class="accordion" id="accordionPanelsStayOpenExample">
+
+
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+                        Accordion Item #3
+                      </button>
+                    </h2>
+                    <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse">
+                      <div class="accordion-body">
+                        <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                      </div>
+                    </div>
+                  </div>
+
+
+
+
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                      Node source
+                    </button>
+                  </h2>
+                  <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
+                    <div class="accordion-body">
+
+
+
+                        <div id="node-editor-container">
+                            <div id="node-editor"></div>
+                            <div>
+                                <button id="node-editor-update" type="button" class="btn btn-secondary">Update</button>
+                            </div>
+                        </div>
+
+
+
+
+                    </div>
+                  </div>
                 </div>
-            </div>
-            <div id="wysiwyg-container">
-                <div id="wysiwyg"></div>
-                <div>
-                    <button id="wysiwyg-update">Update</button>
+
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                      Node rich content
+                    </button>
+                  </h2>
+                  <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
+                    <div class="accordion-body">
+                        <div id="wysiwyg-container">
+                            <div id="wysiwyg"></div>
+                            <div>
+                                <button id="wysiwyg-update" type="button" class="btn btn-secondary">Update</button>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
                 </div>
-            </div>
+
+              </div>
         </div>
     </div>
 
@@ -100,7 +163,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.11/jstree.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 
 
@@ -144,25 +207,10 @@
 
 
     <script>
-const myResizableDiv1 = new ResizableDiv('#left-panel');
+
+
+
 // const myResizableDiv2 = new ResizableDiv('#main-content-container');
-
-const myTabPanel = new TabPanel('#main-content-container');
-
-
-// Create an instance of the Popin class
-let myPopin = new Popin(500, 300);
-
-// Add content to the popin
-myPopin.setContent('Popin content');
-
-// Display the popin on the page
-// myPopin.show();
-
-// Close the popin after 5 seconds
-setTimeout(() => {
-  // myPopin.close();
-}, 5000);
 
 
 
