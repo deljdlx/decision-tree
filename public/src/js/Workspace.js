@@ -1,13 +1,17 @@
 class Workspace
 {
-  jsTree = null;
   tree = null;
+  currentNode = null;
+
+  jsTree = null;
   echart = null;
   wysiwygEditor = null;
 
   sourceEditor = null;
   nodeEditor = null;
   questionnaire = null;
+
+  nodeInfo = null;
 
   selectors = {
 
@@ -19,6 +23,7 @@ class Workspace
     sourceEditor: "source-editor",
     questionnaire: '#questionnaire',
     wysiwygEditor: '#wysiwyg',
+    nodeInfo : '#node-info-container',
   };
 
   leftPanel;
@@ -39,12 +44,32 @@ class Workspace
 
     this.initializeQuestionnaire();
     this.initializeWysiwygEditor();
+
+    this.initializeNodeInfo();
+  }
+
+  selectNode(node) {
+    this.nodeEditor.setNode(node);
+    this.nodeEditor.refresh();
+
+    this.wysiwygEditor.setNode(node);
+    this.wysiwygEditor.refresh();
+
+    this.nodeInfo.setNode(node);
+    this.nodeInfo.refresh();
   }
 
   initializeLayout() {
     new ResizableDiv(this.selectors.leftPanel);
     new ResizableDiv(this.selectors.rightPanel, "left");
     new TabPanel(this.selectors.mainPanel);
+  }
+
+  initializeNodeInfo() {
+    this.nodeInfo = new NodeInfo(
+      document.querySelector(this.selectors.nodeInfo)
+    );
+    this.nodeInfo.render();
   }
 
   initializeWysiwygEditor() {
@@ -87,30 +112,25 @@ class Workspace
     this.jsTree = new JSTreeRenderer(this.tree, this.selectors.treeJs);
 
     this.jsTree.addEventListener('select', node => {
-      this.nodeEditor.setNode(node);
-      this.nodeEditor.refresh();
-
-      this.wysiwygEditor.setNode(node);
-      this.wysiwygEditor.refresh();
-
+      this.selectNode(node);
     });
 
     this.jsTree.addEventListener('rename', data => {
-        this.updateTree();
+        this.updateTree(false);
     });
 
     this.jsTree.addEventListener('create', data => {
-        this.updateTree();
+        this.updateTree(false);
     });
 
     this.jsTree.addEventListener('delete', data => {
-        this.updateTree();
+        this.updateTree(false);
     });
     this.jsTree.addEventListener('move', data => {
       console.log('%cWorkspace.js :: 77 =============================', 'color: #f00; font-size: 1rem');
       console.log(data);
       this.tree.loadData(data);
-      this.updateTree();
+      this.updateTree(false);
     });
 
     this.jsTree.addEventListener('paste', data => {
@@ -126,7 +146,9 @@ class Workspace
     this.echart = new EchartRenderer(echartContainer, this.tree);
     this.echart.addEventListener('click', data => {
         const nodeId = data.id;
-        this.jsTree.selectNodeById(nodeId);
+        this.selectNode(
+          this.tree.getNodeById(nodeId)
+        );
     });
 
     this.echart.addEventListener('new-node', node => {
@@ -146,12 +168,15 @@ class Workspace
   });
   }
 
-  updateTree() {
+  updateTree(updateJsTree = true) {
     this.echart.refresh();
     this.sourceEditor.refresh();
     this.nodeEditor.refresh();
     this.questionnaire.refresh();
-    this.jsTree.refresh();
+
+    if(updateJsTree) {
+      this.jsTree.refresh();
+    }
   }
 
   loadByURL(url) {
@@ -162,10 +187,14 @@ class Workspace
         this.tree.loadData(data);
 
 
-        // const treeData = tree.toJSON()
+
         this.sourceEditor.refresh();
         this.jsTree.refresh();
         this.echart.render();
+
+        this.wysiwygEditor.setNode(this.tree);
+        this.wysiwygEditor.render();
+
 
         /*
         const questionnaire = new Questionnaire(treeData, document.querySelector('#questionnaire'));

@@ -5,7 +5,7 @@ class TreeNodeData
     extendedCaption: "",
   };
 
-  constuctor(data = {}) {
+  constructor(data = {}) {
     this.data = data;
   }
 

@@ -27,6 +27,18 @@ class QuestionnaireRenderer {
     questionCaption.innerText = this.currentQuestion.getCaption();
     questionElement.appendChild(questionCaption);
 
+    console.log('%cQuestionnaireRenderer.js :: 30 =============================', 'color: #f00; font-size: 1rem');
+    console.log(this.currentQuestion.getData());
+
+
+    if(this.currentQuestion.getData().get('content')) {
+      const descriptionElement = document.createElement('div');
+      descriptionElement.innerHTML = this.currentQuestion.getData().get('content');
+      questionElement.append(descriptionElement);
+    }
+
+
+
     const optionsElement = document.createElement("div");
 
     for (let key in this.currentQuestion.getOptions()) {

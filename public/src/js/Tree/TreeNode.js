@@ -88,9 +88,15 @@ class TreeNode extends TreeAbstractNode{
 
   }
 
+  fireUpdateEvent() {
+    this.fireEvent('updated', this);
+  }
+
+
   loadData(descriptor) {
     this.setCaption(descriptor.caption);
     this.setId(descriptor.id);
+
     this.setData(new TreeNodeData(descriptor.data));
 
     this.nodesById[this.id] = this;
@@ -108,9 +114,6 @@ class TreeNode extends TreeAbstractNode{
     this.fireEvent('loaded', this.toJSON());
   }
 
-  fireUpdateEvent() {
-    this.fireEvent('updated', this);
-  }
 
   toJSON() {
     const options = {};

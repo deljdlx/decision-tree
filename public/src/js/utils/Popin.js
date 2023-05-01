@@ -30,6 +30,7 @@ class Popin {
     this.closeButton.style.cursor = 'pointer';
 
     this.contentDiv = document.createElement('div');
+    this.contentDiv.classList.add('popin__content')
     this.element.append(this.contentDiv);
 
     this.closeButton.addEventListener('click', () => {

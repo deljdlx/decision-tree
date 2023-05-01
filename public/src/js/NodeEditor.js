@@ -30,7 +30,7 @@ class NodeEditor {
   }
 
   getNode() {
-    return this.node;
+    return this.treeNode;
   }
 
   setNode(treeNode) {

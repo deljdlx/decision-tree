@@ -5,3 +5,8 @@
   border: 1px solid #000;
   z-index:9999;
 }
+
+
+.popin__content {
+  padding : 1rem;
+}

@@ -42,7 +42,9 @@ class WysiwygEditor
 
   render() {
     this.container.innerHTML = this.treeNode.getData().get('content');
-    $(this.container).summernote();
+    $(this.container).summernote({
+      height: 400,
+    });
   }
 
   refresh() {
